@@ -63,8 +63,40 @@ export function createWorld({ env }) {
   floor.name = 'floor';
   scene.add(floor);
 
-  // Drifting motes of light.
+  // Scale: a colonnade of tall columns far out on both sides, and a few huge slabs beyond it,
+  // all receding into the fog. You walk a straight line, but the space reads as vast.
   const rand = mulberry32(7);
+  const stone = new THREE.MeshStandardMaterial({ color: 0xe6e7eb, roughness: 0.9 });
+  const COLUMN_X = 13;
+  const COLUMN_H = 16;
+  const shaft = new THREE.CylinderGeometry(0.42, 0.48, COLUMN_H, 24);
+  const plinth = new THREE.BoxGeometry(1.4, 0.5, 1.4);
+  const capital = new THREE.BoxGeometry(1.3, 0.35, 1.3);
+  for (let z = 5; z > -110; z -= 9) {
+    for (const side of [-1, 1]) {
+      const col = new THREE.Group();
+      col.position.set(side * COLUMN_X, 0, z);
+      const base = new THREE.Mesh(plinth, stone);
+      base.position.y = 0.25;
+      const body = new THREE.Mesh(shaft, stone);
+      body.position.y = 0.5 + COLUMN_H / 2;
+      const top = new THREE.Mesh(capital, stone);
+      top.position.y = 0.5 + COLUMN_H + 0.17;
+      col.add(base, body, top);
+      scene.add(col);
+    }
+  }
+  for (let i = 0; i < 10; i++) {
+    const side = i % 2 ? 1 : -1;
+    const w = 4 + rand() * 6;
+    const h = 22 + rand() * 26;
+    const slab = new THREE.Mesh(new THREE.BoxGeometry(w, h, w * (0.6 + rand())), stone);
+    slab.position.set(side * (42 + rand() * 30), h / 2, 6 - i * 14 - rand() * 8);
+    slab.rotation.y = (rand() - 0.5) * 0.6;
+    scene.add(slab);
+  }
+
+  // Drifting motes of light.
   const COUNT = 500;
   const pos = new Float32Array(COUNT * 3);
   for (let i = 0; i < COUNT; i++) {

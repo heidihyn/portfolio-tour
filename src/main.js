@@ -36,7 +36,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
 
-const camera = new THREE.PerspectiveCamera(62, 1, 0.05, 220);
+const BASE_FOV = 68;
+const camera = new THREE.PerspectiveCamera(BASE_FOV, 1, 0.05, 220);
 camera.rotation.order = 'YXZ';
 
 const pmrem = new THREE.PMREMGenerator(renderer);
@@ -194,7 +195,7 @@ async function enterStation(i) {
   ui.fadeTo(st.project.accent, 1);
   await animate(0.9, (k) => {
     camera.position.lerpVectors(front, inside, k * k);
-    camera.fov = 62 + k * k * 30;
+    camera.fov = BASE_FOV + k * k * 30;
     camera.updateProjectionMatrix();
   });
 
@@ -207,7 +208,7 @@ async function enterStation(i) {
   bloom.enabled = true;
   bloom.strength = activeRoom.bloom ?? 0.5;
   bloom.threshold = BLOOM_ROOM_THRESHOLD;
-  camera.fov = 62;
+  camera.fov = BASE_FOV;
   camera.updateProjectionMatrix();
   state.roomAngle = 0;
   state.mode = 'room';
@@ -461,7 +462,7 @@ function resize() {
   bloom.resolution.set(w, h);
   camera.aspect = w / h;
   // Keep the hallway readable on tall phone screens.
-  camera.fov = w / h < 0.8 ? 72 : 62;
+  camera.fov = w / h < 0.8 ? 74 : BASE_FOV;
   camera.updateProjectionMatrix();
 }
 window.addEventListener('resize', resize);
