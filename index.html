@@ -1,0 +1,179 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heidi's Portfolio Tour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+  /* Single light look, matching the pale hallway. Layout: a full-bleed WebGL hallway with a thin HUD layer on top (speech bubble, year rail, room card). */
+  :root {
+    color-scheme: light;
+    --void: #e4e5e8;
+    --ink: #1d2030;
+    --muted: #686d80;
+    --signal: #25335f;
+    --on-signal: #f4f5f8;
+    --glass: rgba(248, 248, 250, 0.84);
+    --rule: rgba(37, 51, 95, 0.18);
+    --display: "Syncopate", "Arial Black", "Helvetica Neue", sans-serif;
+    --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  }
+  html, body { height: 100%; }
+  [hidden] { display: none !important; }
+  body {
+    background: var(--void);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 15px;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  #app { position: fixed; inset: 0; overflow: hidden; }
+  #scene { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+
+  .hud-top {
+    position: absolute; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: calc(14px + env(safe-area-inset-top, 0px)) 20px 14px;
+    pointer-events: none;
+  }
+  .brand { font-family: var(--display); font-weight: 700; font-size: 12px; letter-spacing: 0.32em; text-transform: uppercase; }
+  .brand span { color: var(--signal); }
+  .hint { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-align: right; }
+
+  .bubble {
+    position: absolute; left: 0; top: 0;
+    width: max-content; max-width: min(320px, calc(100vw - 32px));
+    padding: 14px 16px 14px;
+    background: var(--glass);
+    border: 1px solid var(--rule);
+    border-radius: 14px 14px 14px 4px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(29, 32, 48, 0.12);
+    transition: opacity 0.25s ease;
+    will-change: transform;
+  }
+  .bubble .who { font-family: var(--display); font-size: 10px; letter-spacing: 0.3em; color: var(--signal); margin: 0 0 6px; }
+  .bubble p { margin: 0; line-height: 1.5; text-wrap: pretty; }
+  .bubble .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .bubble .actions:empty { display: none; }
+
+  button {
+    font: inherit; font-weight: 600; font-size: 13px;
+    color: var(--ink); background: transparent;
+    border: 1px solid var(--rule); border-radius: 999px;
+    padding: 8px 14px; cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  button:hover { border-color: var(--signal); }
+  button:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+  button.primary { background: var(--signal); color: var(--on-signal); border-color: var(--signal); }
+  button.primary:hover { background: #33447a; }
+
+  .rail {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    display: flex; gap: 6px; padding: 6px;
+    background: var(--glass); border: 1px solid var(--rule); border-radius: 999px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    max-width: calc(100vw - 32px); overflow-x: auto;
+  }
+  .rail button { border: 0; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 14px; line-height: 1.1; white-space: nowrap; }
+  .rail button b { font-family: var(--display); font-size: 12px; letter-spacing: 0.12em; }
+  .rail button small { font-size: 10px; font-weight: 500; color: var(--muted); }
+  .rail button.active { background: rgba(37, 51, 95, 0.1); }
+  .rail button.active small { color: var(--signal); }
+  .rail button:disabled { opacity: 0.4; cursor: default; }
+
+  .room-card {
+    position: absolute; left: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    width: min(380px, calc(100vw - 40px));
+    padding: 20px 22px 18px;
+    background: var(--glass); border: 1px solid var(--rule); border-radius: 18px;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  }
+  .room-card .eyebrow { font-family: var(--display); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--signal); margin: 0 0 8px; }
+  .room-card h1 { font-family: var(--display); font-weight: 700; font-size: clamp(18px, 3vw, 22px); line-height: 1.25; letter-spacing: 0.02em; margin: 0 0 12px; text-wrap: balance; }
+  .room-card p { margin: 0 0 14px; color: var(--muted); line-height: 1.55; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; padding: 0; list-style: none; }
+  .chips li { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); }
+  .room-card .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .room-card .row small { color: var(--muted); font-size: 12px; }
+
+  #fade { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.8s ease; background: var(--void); }
+
+  .loading {
+    position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
+    background: var(--void); transition: opacity 0.8s ease; padding-inline: 16px;
+  }
+  .loading.done { opacity: 0; pointer-events: none; }
+  .loading .mark { font-family: var(--display); font-size: 12px; letter-spacing: 0.4em; color: var(--signal); animation: breathe 2.4s ease-in-out infinite; }
+  .loading p { color: var(--muted); margin: 10px 0 0; max-width: 46ch; line-height: 1.5; }
+  @keyframes breathe { 50% { opacity: 0.35; } }
+
+  @media (max-width: 640px) {
+    .hint { display: none; }
+    .room-card { left: 16px; right: 16px; width: auto; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+    .rail button { padding: 6px 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .loading .mark { animation: none; }
+    #fade, .bubble { transition: none; }
+  }
+</style>
+
+<div id="app">
+  <canvas id="scene" tabindex="0" aria-label="3D hallway of Heidi's projects. Click the floor to walk, click a portal to enter."></canvas>
+
+  <header class="hud-top">
+    <div class="brand">Heidi <span>/</span> Tour</div>
+    <div class="hint" id="hint">Click the floor to walk · Drag to look around · Click a portal to enter</div>
+  </header>
+
+  <div class="bubble" id="bubble" hidden>
+    <div class="who">HEIDI</div>
+    <p id="bubble-text"></p>
+    <div class="actions" id="bubble-actions"></div>
+  </div>
+
+  <nav class="rail" id="rail" aria-label="Jump to a project"></nav>
+
+  <section class="room-card" id="room-card" hidden aria-live="polite">
+    <p class="eyebrow" id="room-eyebrow"></p>
+    <h1 id="room-title"></h1>
+    <ul class="chips" id="room-tags"></ul>
+    <p id="room-note"></p>
+    <div class="row">
+      <button class="primary" id="room-exit" type="button">Back to the hallway</button>
+      <small>Drag to look around · Esc to leave</small>
+    </div>
+  </section>
+
+  <div id="fade"></div>
+
+  <div class="loading" id="loading">
+    <div>
+      <div class="mark">ENTERING</div>
+      <p id="loading-note">Warming up the space…</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // If the 3D modules fail to load (old browser, no WebGL, blocked CDN), say so instead of hanging.
+  setTimeout(function () {
+    if (!window.__tourReady) {
+      var n = document.getElementById('loading-note');
+      if (n) n.textContent = 'The 3D space is taking a while. If nothing appears, try a recent Chrome, Safari, or Firefox with hardware acceleration on.';
+    }
+  }, 15000);
+</script>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+</script>
+<script type="module" src="src/main.js"></script>
