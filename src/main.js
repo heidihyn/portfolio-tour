@@ -480,7 +480,7 @@ function frame() {
     if (state.mode === 'room') placeRoomCamera(dt);
     activeRoom.update(t, dt);
   } else {
-    world.update(t, dt);
+    world.update(t, dt, camera);
     stations.forEach((s) => s.portal.update(t, dt));
     headScreen.copy(guide.headWorld()).project(camera);
     // Only show what she says while she's on screen (you may have turned away).
