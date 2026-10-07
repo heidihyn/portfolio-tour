@@ -69,6 +69,24 @@ const stations = PROJECTS.map((project, i) => {
   const side = i % 2 === 0 ? -1 : 1;
   const z = FIRST_PORTAL_Z - i * SPACING;
   const portal = project.module.buildPortal({ year: project.year });
+  // Clicks land on a generous invisible box around the whole portal (frame included, either side),
+  // not just its inner surface, so a click anywhere on the portal counts. Measured before the
+  // group is placed, so the box sits in the portal's own frame. Labels and floor decor don't count.
+  const box = new THREE.Box3();
+  portal.group.updateMatrixWorld(true);
+  portal.group.traverse((o) => {
+    if (!o.isMesh || o.isInstancedMesh) return;
+    const b = new THREE.Box3().setFromObject(o);
+    if (b.max.y > 0.4) box.union(b);
+  });
+  const size = box.getSize(new THREE.Vector3()).addScalar(0.4);
+  const hitBox = new THREE.Mesh(
+    new THREE.BoxGeometry(size.x, size.y, Math.max(size.z, 0.8)),
+    new THREE.MeshBasicMaterial({ visible: false, side: THREE.DoubleSide }),
+  );
+  box.getCenter(hitBox.position);
+  portal.group.add(hitBox);
+  portal.hitTargets = [...portal.hitTargets, hitBox];
   portal.group.position.set(side * PORTAL_X, 0, z);
   portal.group.scale.setScalar(PORTAL_SCALE);
   portal.group.add(contactShadow(3.2, 0.2));
@@ -110,6 +128,8 @@ const state = {
   announced: -1,
 };
 let activeRoom = null;
+// ?debug exposes internals for testing in the browser console.
+if (new URLSearchParams(location.search).has('debug')) window.__tour = { THREE, camera, stations, hitTargets, state };
 
 const ui = createUI({
   projects: PROJECTS,
