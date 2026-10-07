@@ -26,11 +26,14 @@ export function addOutlines(root, { color = 0x1d2030, width = 0.012 } = {}) {
   const hulls = new Map();
   const targets = [];
   root.traverse((o) => {
-    if (!o.isMesh || o.isInstancedMesh || o.userData.isOutline) return;
+    if (!o.isMesh || o.isInstancedMesh || o.userData.isOutline || o.userData.noOutline) return;
     const m = o.material;
     if (!m || !m.isMeshStandardMaterial || m.transparent || m.side === THREE.BackSide) return;
     const g = o.geometry;
     if (FLAT.has(g.type) || g.parameters?.openEnded) return;
+    // Partial spheres (hair caps, shells) are open surfaces; a hull would stick out as flaps.
+    const gp = g.parameters ?? {};
+    if (g.type === 'SphereGeometry' && ((gp.thetaLength ?? Math.PI) < Math.PI - 1e-3 || (gp.phiLength ?? Math.PI * 2) < Math.PI * 2 - 1e-3)) return;
     targets.push(o);
   });
   const s = new THREE.Vector3();

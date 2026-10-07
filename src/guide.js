@@ -75,6 +75,7 @@ export function createGuide() {
   for (const x of [-0.034, 0.034]) {
     const e = mesh(new THREE.SphereGeometry(0.011, 10, 8), eyes, x, 0.012, 0.09, head);
     e.scale.set(1.3, 0.8, 0.6);
+    e.userData.noOutline = true;
   }
   const cap = mesh(new THREE.SphereGeometry(0.112, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.52), hair, 0, 0.012, -0.004, head);
   cap.scale.set(0.93, 1.1, 0.98);
@@ -87,10 +88,15 @@ export function createGuide() {
     curtainMat, 0, -0.27, -0.005, head,
   );
   curtain.scale.z = 0.92;
-  // Side-swept fringe.
-  const fringe = mesh(new THREE.SphereGeometry(0.06, 20, 12), hair, 0.028, 0.06, 0.07, head);
-  fringe.scale.set(1.45, 0.55, 0.5);
-  fringe.rotation.z = 0.38;
+  // Side-swept fringe: a thin shell of hair lying on the forehead, lower on one side.
+  const fringeMat = hair.clone();
+  fringeMat.side = THREE.DoubleSide;
+  const fringe = mesh(
+    new THREE.SphereGeometry(0.115, 32, 8, Math.PI / 2 - 1.1, 1.95, Math.PI * 0.27, Math.PI * 0.14),
+    fringeMat, 0, 0.012, 0, head,
+  );
+  fringe.scale.set(0.93, 1.1, 0.98);
+  fringe.rotation.z = -0.22;
 
   group.add(contactShadow(0.42, 0.32));
 
