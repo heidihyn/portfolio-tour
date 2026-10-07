@@ -1,5 +1,9 @@
+<!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A walkable 3D tour of Heidi's projects.">
 <title>Heidi's Portfolio Tour</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +24,8 @@
     --display: "Syncopate", "Arial Black", "Helvetica Neue", sans-serif;
     --body: "Manrope", "Segoe UI", system-ui, sans-serif;
   }
-  html, body { height: 100%; }
+  html, body { height: 100%; margin: 0; }
+  *, *::before, *::after { box-sizing: border-box; }
   [hidden] { display: none !important; }
   body {
     background: var(--void);
@@ -124,6 +129,8 @@
     #fade, .bubble { transition: none; }
   }
 </style>
+</head>
+<body>
 
 <div id="app">
   <canvas id="scene" tabindex="0" aria-label="3D hallway of Heidi's projects. Click the floor to walk, click a portal to enter."></canvas>
@@ -180,3 +187,5 @@
   }
 </script>
 <script type="module" src="src/main.js"></script>
+</body>
+</html>

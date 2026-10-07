@@ -18,6 +18,10 @@ The rooms are placeholders for now.
 - Click a portal (or "Step inside") to enter. Esc or "Back to the hallway" to leave.
 - The year bar at the bottom walks you to any portal. `#2025` in the URL starts at that portal.
 
+## Live site
+
+Hosted on GitHub Pages from the `main` branch: https://heidihyn.github.io/portfolio-tour/
+
 ## Run it locally
 
 No build step. Three.js loads from jsDelivr through an import map, so you only need a static server (ES modules don't load from `file://`):
