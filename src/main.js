@@ -8,6 +8,7 @@ import { createWorld, contactShadow } from './world.js';
 import { createGuide } from './guide.js';
 import { PROJECTS } from './projects.js';
 import { timedMaterials } from './lib/shader.js';
+import { addOutlines } from './lib/outline.js';
 import { createUI } from './ui.js';
 
 // ---------------------------------------------------------------------------
@@ -22,7 +23,6 @@ const SPACING = 13;         // distance between portals along the hallway
 const PORTAL_X = 5.8;
 const PORTAL_SCALE = 0.72;
 const STAND_OFFSET = 5.4;   // the visitor stops this far before a portal to look at it
-const BLOOM_HALLWAY = { strength: 0.3, threshold: 0.97 };
 const BLOOM_ROOM_THRESHOLD = 0.86;
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -51,11 +51,14 @@ const guide = createGuide();
 guide.group.position.set(0, 0, GUIDE_START_Z);
 world.scene.add(guide.group);
 
-const composer = new EffectComposer(renderer);
+// Multisampled render target: post-processing otherwise turns off antialiasing and edges go jagged.
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 }));
 const renderPass = new RenderPass(world.scene, camera);
-const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), BLOOM_HALLWAY.strength, 0.5, BLOOM_HALLWAY.threshold);
+const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.5, BLOOM_ROOM_THRESHOLD);
 composer.addPass(renderPass);
 composer.addPass(bloom);
+// No glow in the pale hallway; it softens every edge. Rooms turn it back on.
+bloom.enabled = false;
 composer.addPass(new OutputPass());
 
 // ---------------------------------------------------------------------------
@@ -79,6 +82,7 @@ world.scene.traverse((o) => {
   const m = o.material;
   if (m && m.isMeshStandardMaterial && m.metalness < 0.5) m.envMapIntensity = Math.min(m.envMapIntensity, 0.4);
 });
+addOutlines(world.scene);
 const hitTargets = stations.flatMap((s) => s.portal.hitTargets);
 const Z_MIN = stations[stations.length - 1].standZ;
 
@@ -194,9 +198,13 @@ async function enterStation(i) {
     camera.updateProjectionMatrix();
   });
 
-  if (!st.room) st.room = st.project.module.buildRoom({ env });
+  if (!st.room) {
+    st.room = st.project.module.buildRoom({ env });
+    addOutlines(st.room.scene, { width: 0.018 });
+  }
   activeRoom = st.room;
   renderPass.scene = activeRoom.scene;
+  bloom.enabled = true;
   bloom.strength = activeRoom.bloom ?? 0.5;
   bloom.threshold = BLOOM_ROOM_THRESHOLD;
   camera.fov = 62;
@@ -219,8 +227,7 @@ async function exitRoom() {
 
   activeRoom = null;
   renderPass.scene = world.scene;
-  bloom.strength = BLOOM_HALLWAY.strength;
-  bloom.threshold = BLOOM_HALLWAY.threshold;
+  bloom.enabled = false;
   state.camZ = state.targetZ = st.standZ;
   state.lookYaw = state.lookPitch = 0;
   state.yaw = yawToward(st);

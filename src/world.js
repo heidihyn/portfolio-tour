@@ -44,6 +44,7 @@ export function createWorld({ env }) {
       float star = step(0.86, rnd) * smoothstep(size, 0.0, dist);
       float twinkle = 0.55 + 0.45 * sin(uTime * (1.0 + 2.5 * hash(cell + 5.0)) + rnd * 40.0);
       col += vec3(1.25, 1.25, 1.35) * star * twinkle * smoothstep(0.04, 0.3, h);
+      col += (hash(gl_FragCoord.xy) - 0.5) / 160.0;
     `, { fog: false, side: THREE.BackSide, depthWrite: false }),
   );
   sky.renderOrder = -10;
@@ -55,6 +56,7 @@ export function createWorld({ env }) {
     surfaceMaterial(/* glsl */ `
       float d = length(vWorld.xz - cameraPosition.xz);
       col = mix(vec3(0.78, 0.785, 0.80), vec3(0.64, 0.65, 0.67), smoothstep(2.0, 20.0, d));
+      col += (hash(gl_FragCoord.xy) - 0.5) / 160.0; // dither away banding rings
     `),
   );
   floor.rotation.x = -Math.PI / 2;
