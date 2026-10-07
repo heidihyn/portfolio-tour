@@ -9,6 +9,8 @@ export function createUI({ projects, onJump, onExitRoom }) {
   const fade = $('fade');
   const roomCard = $('room-card');
   let bubbleKey = null;
+  const scrollCue = $('scroll-cue');
+  if (window.matchMedia('(pointer: coarse)').matches) $('scroll-cue-text').textContent = 'Swipe up to walk';
 
   // Year rail.
   const rail = $('rail');
@@ -58,6 +60,10 @@ export function createUI({ projects, onJump, onExitRoom }) {
       bubble.style.visibility = on ? '' : 'hidden';
     },
 
+    showScrollCue(on) {
+      scrollCue.hidden = !on;
+    },
+
     setActive(i) {
       railButtons.forEach((b, k) => b.classList.toggle('active', k === i));
     },
@@ -83,6 +89,7 @@ export function createUI({ projects, onJump, onExitRoom }) {
       $('room-note').textContent = p.roomNote ?? '';
       roomCard.hidden = false;
       rail.hidden = true;
+      scrollCue.hidden = true;
       $('room-exit').focus({ preventScroll: true });
     },
 

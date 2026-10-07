@@ -272,7 +272,13 @@ canvas.addEventListener('pointermove', (e) => {
         state.roomAngle -= dx * 0.006;
       } else if (state.mode === 'intro' || state.mode === 'tour') {
         state.lookYaw += dx * 0.0045;
-        state.lookPitch = THREE.MathUtils.clamp(state.lookPitch + dy * 0.003, -0.55, 0.5);
+        if (e.pointerType === 'touch') {
+          // Touch screens have no scroll wheel: swiping up walks forward, like scrolling a page.
+          if (state.mode === 'intro') startTour();
+          state.targetZ = THREE.MathUtils.clamp(state.targetZ + dy * 0.03, Z_MIN, START_Z);
+        } else {
+          state.lookPitch = THREE.MathUtils.clamp(state.lookPitch + dy * 0.003, -0.55, 0.5);
+        }
       }
     }
     return;
@@ -296,15 +302,9 @@ canvas.addEventListener('pointerup', (e) => {
   if (moved > 8 || (state.mode !== 'intro' && state.mode !== 'tour')) return;
   setNdc(e);
   raycaster.setFromCamera(ndc, camera);
+  // Clicking only enters portals. Walking is by scrolling (or swiping on touch screens).
   const portalHit = raycaster.intersectObjects(hitTargets, false)[0];
-  if (portalHit) { enterStation(portalHit.object.userData.station); return; }
-  const floorHit = raycaster.intersectObject(world.floor, false)[0];
-  if (floorHit) {
-    // Clicking near a portal walks to its viewing spot; elsewhere walks to just short of the click.
-    const near = stations.find((s) => Math.abs(floorHit.point.z - s.z) < 4 && Math.sign(floorHit.point.x) === s.side && Math.abs(floorHit.point.x) > 2.5);
-    const ahead = Math.cos(state.yaw) >= 0 ? 2.2 : -2.2;
-    walkTo(near ? near.standZ : floorHit.point.z + ahead);
-  }
+  if (portalHit) enterStation(portalHit.object.userData.station);
 });
 
 canvas.addEventListener('pointercancel', () => { state.dragging = false; down = null; });
@@ -312,7 +312,7 @@ canvas.addEventListener('pointercancel', () => { state.dragging = false; down = 
 window.addEventListener('wheel', (e) => {
   if (state.mode === 'room') return;
   if (state.mode === 'intro') startTour();
-  if (state.mode === 'tour') state.targetZ = THREE.MathUtils.clamp(state.targetZ + e.deltaY * 0.008, Z_MIN, START_Z);
+  if (state.mode === 'tour') state.targetZ = THREE.MathUtils.clamp(state.targetZ - e.deltaY * 0.01, Z_MIN, START_Z);
 }, { passive: true });
 
 window.addEventListener('keydown', (e) => {
@@ -424,20 +424,19 @@ function updateHallway(dt, t) {
 
   // What Heidi says.
   if (state.mode === 'intro') {
-    ui.say('intro', "Hi, I'm Heidi. Welcome to my corner of the universe. Want to take a tour with me?", [
-      { label: 'Take the tour', primary: true, onClick: () => { startTour(); state.targetZ = START_Z - 4; } },
-    ]);
+    ui.say('intro', "Hi, I'm Heidi. Welcome to my corner of the universe. Scroll to take a tour with me.");
   } else if (atStation) {
     const p = st.project;
     const actions = p.locked ? [] : [{ label: 'Step inside', primary: true, onClick: () => enterStation(near.index) }];
     ui.say(`station-${near.index}`, p.guideLine, actions);
     state.announced = near.index;
   } else if (state.announced < 0 && !moving) {
-    ui.say('howto', 'Follow me. Click the floor ahead to walk, or scroll. My projects are the portals along the way.');
+    ui.say('howto', 'Follow me. Keep scrolling to walk. My projects are the portals along the way.');
   } else {
     ui.say('quiet', null);
   }
   ui.setActive(st && near.weight > 0.3 ? near.index : -1);
+  ui.showScrollCue(state.walked < 6);
 }
 
 function placeRoomCamera(dt) {

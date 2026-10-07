@@ -93,6 +93,19 @@
   .rail button.active small { color: var(--signal); }
   .rail button:disabled { opacity: 0.4; cursor: default; }
 
+  .scroll-cue {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px 8px 10px; border-radius: 999px;
+    background: var(--glass); border: 1px solid var(--rule);
+    font-size: 13px; font-weight: 600; color: var(--ink);
+    pointer-events: none; white-space: nowrap;
+  }
+  .scroll-cue .mouse { width: 16px; height: 24px; border: 2px solid var(--signal); border-radius: 9px; position: relative; }
+  .scroll-cue .wheel { position: absolute; left: 50%; top: 4px; width: 2px; height: 5px; margin-left: -1px; border-radius: 1px; background: var(--signal); animation: wheel 1.4s ease-in-out infinite; }
+  @keyframes wheel { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(8px); opacity: 0; } 100% { opacity: 0; } }
+
   .room-card {
     position: absolute; left: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     width: min(380px, calc(100vw - 40px));
@@ -125,7 +138,7 @@
     .rail button { padding: 6px 10px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .loading .mark { animation: none; }
+    .loading .mark, .scroll-cue .wheel { animation: none; }
     #fade, .bubble { transition: none; }
   }
 </style>
@@ -133,17 +146,22 @@
 <body>
 
 <div id="app">
-  <canvas id="scene" tabindex="0" aria-label="3D hallway of Heidi's projects. Click the floor to walk, click a portal to enter."></canvas>
+  <canvas id="scene" tabindex="0" aria-label="3D hallway of Heidi's projects. Scroll to walk, drag to look around, click a portal to enter."></canvas>
 
   <header class="hud-top">
     <div class="brand">Heidi <span>/</span> Tour</div>
-    <div class="hint" id="hint">Click the floor to walk · Drag to look around · Click a portal to enter</div>
+    <div class="hint" id="hint">Scroll to walk · Drag to look around · Click a portal to enter</div>
   </header>
 
   <div class="bubble" id="bubble" hidden>
     <div class="who">HEIDI</div>
     <p id="bubble-text"></p>
     <div class="actions" id="bubble-actions"></div>
+  </div>
+
+  <div class="scroll-cue" id="scroll-cue" aria-hidden="true">
+    <span class="mouse"><span class="wheel"></span></span>
+    <span id="scroll-cue-text">Scroll to walk</span>
   </div>
 
   <nav class="rail" id="rail" aria-label="Jump to a project"></nav>

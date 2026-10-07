@@ -13,7 +13,7 @@ The rooms are placeholders for now.
 
 ## Controls
 
-- Click the floor to walk, or scroll, or press W / S.
+- Scroll to walk (swipe up on a phone). W / S also work.
 - Drag to look around, or press A / D or the left and right arrows.
 - Click a portal (or "Step inside") to enter. Esc or "Back to the hallway" to leave.
 - The year bar at the bottom walks you to any portal. `#2025` in the URL starts at that portal.
