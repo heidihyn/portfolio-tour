@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
-  /* Single light look, matching the pale hallway. Layout: a full-bleed WebGL hallway with a thin HUD layer on top (speech bubble, year rail, room card). */
+  /* Single light look, matching the pale hallway. Layout: a full-bleed WebGL hallway with a thin HUD layer on top (speech bubble, year rail). */
   :root {
     color-scheme: light;
     --void: #e4e5e8;
@@ -106,21 +106,6 @@
   .scroll-cue .wheel { position: absolute; left: 50%; top: 4px; width: 2px; height: 5px; margin-left: -1px; border-radius: 1px; background: var(--signal); animation: wheel 1.4s ease-in-out infinite; }
   @keyframes wheel { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(8px); opacity: 0; } 100% { opacity: 0; } }
 
-  .room-card {
-    position: absolute; left: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    width: min(380px, calc(100vw - 40px));
-    padding: 20px 22px 18px;
-    background: var(--glass); border: 1px solid var(--rule); border-radius: 18px;
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  }
-  .room-card .eyebrow { font-family: var(--display); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--signal); margin: 0 0 8px; }
-  .room-card h1 { font-family: var(--display); font-weight: 700; font-size: clamp(18px, 3vw, 22px); line-height: 1.25; letter-spacing: 0.02em; margin: 0 0 12px; text-wrap: balance; }
-  .room-card p { margin: 0 0 14px; color: var(--muted); line-height: 1.55; }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; padding: 0; list-style: none; }
-  .chips li { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--rule); }
-  .room-card .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .room-card .row small { color: var(--muted); font-size: 12px; }
-
   #fade { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.8s ease; background: var(--void); }
 
   .loading {
@@ -134,8 +119,11 @@
 
   @media (max-width: 640px) {
     .hint { display: none; }
-    .room-card { left: 16px; right: 16px; width: auto; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
     .rail button { padding: 6px 10px; }
+  }
+  @media (max-width: 440px) {
+    /* Five stops don't fit with captions on a phone; the years alone do. */
+    .rail button small { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     .loading .mark, .scroll-cue .wheel { animation: none; }
@@ -165,17 +153,6 @@
   </div>
 
   <nav class="rail" id="rail" aria-label="Jump to a project"></nav>
-
-  <section class="room-card" id="room-card" hidden aria-live="polite">
-    <p class="eyebrow" id="room-eyebrow"></p>
-    <h1 id="room-title"></h1>
-    <ul class="chips" id="room-tags"></ul>
-    <p id="room-note"></p>
-    <div class="row">
-      <button class="primary" id="room-exit" type="button">Back to the hallway</button>
-      <small>Drag to look around · Esc to leave</small>
-    </div>
-  </section>
 
   <div id="fade"></div>
 

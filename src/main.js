@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createWorld, contactShadow } from './world.js';
@@ -23,7 +22,8 @@ const SPACING = 13;         // distance between portals along the hallway
 const PORTAL_X = 5.8;
 const PORTAL_SCALE = 0.72;
 const STAND_OFFSET = 5.4;   // the visitor stops this far before a portal to look at it
-const BLOOM_ROOM_THRESHOLD = 0.86;
+const END_GAP = 16;         // from the last side portal to the one across the end of the hallway
+const END_STAND = 7.5;      // the visitor stops this far before the end portal
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -48,26 +48,22 @@ try {
 } catch { /* fall back to system fonts on the labels */ }
 
 const world = createWorld({ env });
-const guide = createGuide();
+const guide = await createGuide();
 guide.group.position.set(0, 0, GUIDE_START_Z);
 world.scene.add(guide.group);
 
 // Multisampled render target: post-processing otherwise turns off antialiasing and edges go jagged.
 const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 }));
-const renderPass = new RenderPass(world.scene, camera);
-const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.5, BLOOM_ROOM_THRESHOLD);
-composer.addPass(renderPass);
-composer.addPass(bloom);
-// No glow in the pale hallway; it softens every edge. Rooms turn it back on.
-bloom.enabled = false;
+composer.addPass(new RenderPass(world.scene, camera));
 composer.addPass(new OutputPass());
 
 // ---------------------------------------------------------------------------
-// Stations: one portal per project, alternating left (-x) and right (+x)
+// Stations: one portal per project, alternating left (-x) and right (+x), and the end portal
+// across the far end of the hallway (side 0).
 
 const stations = PROJECTS.map((project, i) => {
-  const side = i % 2 === 0 ? -1 : 1;
-  const z = FIRST_PORTAL_Z - i * SPACING;
+  const side = project.end ? 0 : i % 2 === 0 ? -1 : 1;
+  const z = project.end ? FIRST_PORTAL_Z - (i - 1) * SPACING - END_GAP : FIRST_PORTAL_Z - i * SPACING;
   const portal = project.module.buildPortal({ year: project.year });
   // Clicks land on a generous invisible box around the whole portal (frame included, either side),
   // not just its inner surface, so a click anywhere on the portal counts. Measured before the
@@ -90,11 +86,11 @@ const stations = PROJECTS.map((project, i) => {
   portal.group.position.set(side * PORTAL_X, 0, z);
   portal.group.scale.setScalar(PORTAL_SCALE);
   portal.group.add(contactShadow(3.2, 0.2));
-  // Angle each portal toward the visitor walking up the hallway.
-  portal.group.rotation.y = side < 0 ? 0.95 : -0.95;
+  // Angle each side portal toward the visitor walking up the hallway; the end one faces them.
+  portal.group.rotation.y = side * -0.95;
   world.scene.add(portal.group);
   portal.hitTargets.forEach((m) => { m.userData.station = i; });
-  return { project, portal, side, z, standZ: z + STAND_OFFSET, room: null, hover: 0 };
+  return { project, portal, side, z, standZ: z + (project.end ? END_STAND : STAND_OFFSET), hover: 0 };
 });
 // The studio environment is bright; keep plastic surfaces subtle in the dark hallway and let metals shine.
 world.scene.traverse((o) => {
@@ -109,7 +105,7 @@ const Z_MIN = stations[stations.length - 1].standZ;
 // State
 
 const state = {
-  mode: 'intro',        // intro | tour | transit | room
+  mode: 'intro',        // intro | tour | transit (stepping through a portal)
   camZ: START_Z,
   targetZ: START_Z,
   yaw: 0,
@@ -118,8 +114,6 @@ const state = {
   lookPitch: 0,
   hovered: -1,
   walked: 0,
-  station: -1,
-  roomAngle: 0,
   dragging: false,
   speed: 0,
   bob: 0,
@@ -127,14 +121,12 @@ const state = {
   keys: new Set(),
   announced: -1,
 };
-let activeRoom = null;
 // ?debug exposes internals for testing in the browser console.
 if (new URLSearchParams(location.search).has('debug')) window.__tour = { THREE, camera, stations, hitTargets, state };
 
 const ui = createUI({
   projects: PROJECTS,
   onJump: (i) => jumpTo(i),
-  onExitRoom: () => exitRoom(),
 });
 
 // ---------------------------------------------------------------------------
@@ -169,23 +161,24 @@ function walkTo(z) {
   state.targetZ = THREE.MathUtils.clamp(z, Z_MIN, START_Z);
 }
 
-async function jumpTo(i) {
+function jumpTo(i) {
   if (state.mode === 'transit') return;
-  if (state.mode === 'room') await exitRoom();
   walkTo(stations[i].standZ);
 }
 
+// Step through a portal: walk up to it, fly in, and open the project's own page.
 async function enterStation(i) {
   const st = stations[i];
-  if (state.mode === 'transit' || state.mode === 'room') return;
-  if (st.project.locked || !st.project.module.buildRoom) {
+  if (state.mode === 'transit') return;
+  if (!st.project.page) {
     if (state.mode === 'intro') startTour();
     walkTo(st.standZ);
     state.announced = -1;
     return;
   }
   state.mode = 'transit';
-  state.station = i;
+  // Coming back (browser back button) lands in front of this portal.
+  history.replaceState(null, '', `#${encodeURIComponent(st.project.id)}`);
   ui.say('transit', null);
   ui.setActive(i);
   ui.setRailEnabled(false);
@@ -218,47 +211,33 @@ async function enterStation(i) {
     camera.fov = BASE_FOV + k * k * 30;
     camera.updateProjectionMatrix();
   });
-
-  if (!st.room) {
-    st.room = st.project.module.buildRoom({ env });
-    addOutlines(st.room.scene, { width: 0.018 });
-  }
-  activeRoom = st.room;
-  renderPass.scene = activeRoom.scene;
-  bloom.enabled = true;
-  bloom.strength = activeRoom.bloom ?? 0.5;
-  bloom.threshold = BLOOM_ROOM_THRESHOLD;
-  camera.fov = BASE_FOV;
-  camera.updateProjectionMatrix();
-  state.roomAngle = 0;
-  state.mode = 'room';
-  placeRoomCamera(0);
-  ui.showRoom(st.project);
-  ui.setRailEnabled(true);
-  ui.fadeTo(null, 0);
+  location.href = new URL(st.project.page, document.baseURI).href;
 }
 
-async function exitRoom() {
-  if (state.mode !== 'room') return;
-  const st = stations[state.station];
-  state.mode = 'transit';
-  ui.hideRoom();
-  ui.fadeTo(st.project.accent, 1);
-  await animate(0.8, () => {});
-
-  activeRoom = null;
-  renderPass.scene = world.scene;
-  bloom.enabled = false;
+/** Stand in front of portal i, facing it, as if you'd just walked up. */
+function standAt(i) {
+  const st = stations[i];
   state.camZ = state.targetZ = st.standZ;
   state.lookYaw = state.lookPitch = 0;
   state.yaw = yawToward(st);
   state.guideYaw = 0;
-  guide.group.position.set(-st.side * 1.4, 0, st.standZ - GUIDE_LEAD);
+  state.walked = Math.max(state.walked, 6);
+  guide.group.position.set(st.side ? -st.side * 1.4 : 1.6, 0, st.standZ - GUIDE_LEAD);
   state.announced = -1;
   state.mode = 'tour';
-  ui.fadeTo(null, 0);
-  canvas.focus({ preventScroll: true });
 }
+
+// Coming back from a project page with the browser's back button can restore this page exactly
+// as it was left: mid-fade, inside the portal. Put the visitor back in the hallway.
+window.addEventListener('pageshow', (e) => {
+  if (!e.persisted) return;
+  tweens.clear();
+  const i = PROJECTS.findIndex((p) => p.id === decodeURIComponent(location.hash.slice(1)));
+  standAt(Math.max(0, i));
+  resize();
+  ui.setRailEnabled(true);
+  ui.fadeTo(null, 0);
+});
 
 // ---------------------------------------------------------------------------
 // Input
@@ -288,9 +267,7 @@ canvas.addEventListener('pointermove', (e) => {
     down.moved += Math.abs(dx) + Math.abs(dy);
     if (down.moved > 6) {
       canvas.style.cursor = 'grabbing';
-      if (state.mode === 'room') {
-        state.roomAngle -= dx * 0.006;
-      } else if (state.mode === 'intro' || state.mode === 'tour') {
+      if (state.mode === 'intro' || state.mode === 'tour') {
         state.lookYaw += dx * 0.0045;
         if (e.pointerType === 'touch') {
           // Touch screens have no scroll wheel: swiping up walks forward, like scrolling a page.
@@ -309,7 +286,7 @@ canvas.addEventListener('pointermove', (e) => {
     state.hovered = hit ? hit.object.userData.station : -1;
     canvas.style.cursor = state.hovered >= 0 ? 'pointer' : 'grab';
   } else {
-    canvas.style.cursor = state.mode === 'room' ? 'grab' : 'default';
+    canvas.style.cursor = 'default';
   }
 });
 
@@ -330,7 +307,6 @@ canvas.addEventListener('pointerup', (e) => {
 canvas.addEventListener('pointercancel', () => { state.dragging = false; down = null; });
 
 window.addEventListener('wheel', (e) => {
-  if (state.mode === 'room') return;
   if (state.mode === 'intro') startTour();
   if (state.mode === 'tour') state.targetZ = THREE.MathUtils.clamp(state.targetZ - e.deltaY * 0.01, Z_MIN, START_Z);
 }, { passive: true });
@@ -345,8 +321,6 @@ window.addEventListener('keydown', (e) => {
     if (state.mode === 'intro') startTour();
     state.keys.add(k);
     e.preventDefault();
-  } else if (k === 'escape') {
-    exitRoom();
   } else if ((k === 'enter' || k === ' ') && state.mode === 'tour') {
     const i = nearestStation().index;
     if (i >= 0) enterStation(i);
@@ -424,10 +398,11 @@ function updateHallway(dt, t) {
     guideTarget = new THREE.Vector3(0, 0, GUIDE_START_Z);
     guideYawTarget = 0;
   } else {
-    const gx = st && near.weight > 0.2 ? -st.side * 1.7 : 0.8;
+    // She stands on the far side of the path from a side portal, and off to the right of the end one.
+    const gx = st && near.weight > 0.2 ? (st.side ? -st.side * 1.7 : 1.6) : 0.8;
     guideTarget = new THREE.Vector3(gx, 0, state.camZ - GUIDE_LEAD - (atStation ? 0.6 : 0));
     guideYawTarget = atStation ? 0 : Math.PI;
-    if (atStation) point = st.side * Math.cos(state.guideYaw) > 0 ? 1 : -1;
+    if (atStation) point = st.side ? (st.side * Math.cos(state.guideYaw) > 0 ? 1 : -1) : -1;
   }
   const gp = guide.group.position;
   const gPrev = gp.clone();
@@ -447,7 +422,7 @@ function updateHallway(dt, t) {
     ui.say('intro', "Hi, I'm Heidi. Welcome to my corner of the universe. Scroll to take a tour with me.");
   } else if (atStation) {
     const p = st.project;
-    const actions = p.locked ? [] : [{ label: 'Step inside', primary: true, onClick: () => enterStation(near.index) }];
+    const actions = p.page ? [{ label: p.end ? 'Plan your event' : 'Step inside', primary: true, onClick: () => enterStation(near.index) }] : [];
     ui.say(`station-${near.index}`, p.guideLine, actions);
     state.announced = near.index;
   } else if (state.announced < 0 && !moving) {
@@ -459,17 +434,6 @@ function updateHallway(dt, t) {
   ui.showScrollCue(state.walked < 6);
 }
 
-function placeRoomCamera(dt) {
-  const v = activeRoom.view;
-  if (!state.dragging && !reducedMotion) state.roomAngle += dt * 0.07;
-  camera.position.set(
-    v.center.x + Math.sin(state.roomAngle) * v.radius,
-    v.height,
-    v.center.z + Math.cos(state.roomAngle) * v.radius,
-  );
-  camera.lookAt(v.center);
-}
-
 // ---------------------------------------------------------------------------
 // Resize + loop
 
@@ -478,7 +442,6 @@ function resize() {
   const h = window.innerHeight;
   renderer.setSize(w, h, false);
   composer.setSize(w, h);
-  bloom.resolution.set(w, h);
   camera.aspect = w / h;
   // Keep the hallway readable on tall phone screens.
   camera.fov = w / h < 0.8 ? 74 : BASE_FOV;
@@ -498,24 +461,19 @@ function frame() {
 
   if (state.mode === 'intro' || state.mode === 'tour') {
     updateHallway(dt, t);
-  } else if (state.mode === 'transit' && !activeRoom) {
+  } else {
     guide.update(dt, t, { walking: state.speed > 0, speed: 2, waving: false, point: 0 });
   }
   guide.group.rotation.y = state.guideYaw;
 
-  if (activeRoom) {
-    if (state.mode === 'room') placeRoomCamera(dt);
-    activeRoom.update(t, dt);
-  } else {
-    world.update(t, dt, camera);
-    stations.forEach((s) => s.portal.update(t, dt));
-    headScreen.copy(guide.headWorld()).project(camera);
-    // Only show what she says while she's on screen (you may have turned away).
-    const onScreen = headScreen.z < 1 && Math.abs(headScreen.x) < 1.25;
-    ui.setBubbleShown(onScreen);
-    if (onScreen) {
-      ui.placeBubble((headScreen.x * 0.5 + 0.5) * window.innerWidth, (-headScreen.y * 0.5 + 0.5) * window.innerHeight);
-    }
+  world.update(t, dt, camera);
+  stations.forEach((s) => s.portal.update(t, dt));
+  headScreen.copy(guide.headWorld()).project(camera);
+  // Only show what she says while she's on screen (you may have turned away).
+  const onScreen = headScreen.z < 1 && Math.abs(headScreen.x) < 1.25;
+  ui.setBubbleShown(onScreen);
+  if (onScreen) {
+    ui.placeBubble((headScreen.x * 0.5 + 0.5) * window.innerWidth, (-headScreen.y * 0.5 + 0.5) * window.innerHeight);
   }
 
   composer.render(dt);
@@ -525,8 +483,8 @@ function frame() {
 requestAnimationFrame(() => {
   frame();
   ui.ready();
-  // Deep link: #2025 walks straight to that portal.
+  // Deep link: #2025 starts in front of that portal (it's also where a project page's back link lands).
   const id = decodeURIComponent(location.hash.slice(1));
   const i = PROJECTS.findIndex((p) => p.id === id);
-  if (i >= 0) { startTour(); state.targetZ = stations[i].standZ; }
+  if (i >= 0) standAt(i);
 });

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { surfaceMaterial } from '../lib/shader.js';
 import { makeLabel } from '../lib/text.js';
 
-// A dim placeholder at the end of the hallway for whatever comes next. No room yet.
+// A dim placeholder at the end of the hallway for whatever comes next. It has no page yet.
 
 const R = 1.5;
 const CY = 1.95;

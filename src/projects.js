@@ -2,13 +2,16 @@ import * as minigolf from './portals/minigolf-2024.js';
 import * as speakeasy from './portals/speakeasy-2025.js';
 import * as mystery from './portals/mystery-2026.js';
 import * as nextChapter from './portals/next-chapter.js';
+import * as hostInvite from './portals/host-invite.js';
 
-// The tour, in walking order. Portals alternate left, right, left... down the hallway.
+// The tour, in walking order. Portals alternate left, right, left... down the hallway, and an
+// entry with `end: true` stands across the far end of it, facing you.
 //
 // To add a project: create a module in ./portals that exports
 //   buildPortal() -> { group, focus, hitTargets, centerY, update(t, dt) }
-//   buildRoom({ env }) -> { scene, update(t, dt), view: { center, radius, height }, bloom }
-// then add an entry below. Leave out buildRoom (like nextChapter) for a portal you can't enter yet.
+// and a standalone page for it (see projects/2024/index.html), then add an entry below with
+// `page` pointing at that page. Stepping through the portal opens the page. Leave out `page`
+// (like 2027) for a portal you can't enter yet.
 
 export const PROJECTS = [
   {
@@ -19,7 +22,7 @@ export const PROJECTS = [
     tags: ['Minigolf', 'Trivia', 'Food trucks'],
     accent: '#7be06a',
     guideLine: "On your left is my 2024 birthday: minigolf, trivia, and food trucks. Want to play a round?",
-    roomNote: "This room is a placeholder for now. We'll fill it in with the real party together.",
+    page: 'projects/2024/',
     module: minigolf,
   },
   {
@@ -30,7 +33,7 @@ export const PROJECTS = [
     tags: ['1920s', 'Mafia', 'Speakeasy'],
     accent: '#f3b45a',
     guideLine: "Over here is 2025. We went back to the 1920s for a mafia night in a speakeasy. Know the password?",
-    roomNote: "This room is a placeholder for now. We'll fill it in with the real night together.",
+    page: 'projects/2025/',
     module: speakeasy,
   },
   {
@@ -41,7 +44,7 @@ export const PROJECTS = [
     tags: ['AI murder mystery', 'Hacker game', 'Dance floor'],
     accent: '#ff4fb4',
     guideLine: "And this is 2026: an AI murder mystery, a hacking game, and a dance floor. Someone in there is lying.",
-    roomNote: "This room is a placeholder for now. Next we can bring in the real game.",
+    page: 'projects/2026/',
     module: mystery,
   },
   {
@@ -54,5 +57,17 @@ export const PROJECTS = [
     guideLine: "That one hasn't happened yet. You'll have to come back next year.",
     locked: true,
     module: nextChapter,
+  },
+  {
+    id: 'host',
+    year: 'Host',
+    kind: 'Invitation',
+    title: 'Have Heidi host your event',
+    tags: ['Your event'],
+    accent: '#d8b26a',
+    guideLine: "And this one's for you. Have an event coming up? Step through and let me host it.",
+    page: 'host/',
+    end: true,
+    module: hostInvite,
   },
 ];

@@ -1,131 +1,111 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { contactShadow } from './world.js';
 
-// Heidi: slim and petite, long pin-straight black hair with a side-swept fringe,
-// navy V-neck sweater, navy column skirt, black flats. Faces +z by default.
-// Arms can wave (right) and point (either side, in local space).
+// Heidi: slim and petite, long straight black hair, navy sweater, navy column skirt, black flats.
+// The model is a rigged human (assets/heidi.glb, built from CC0 MakeHuman assets, see the README)
+// with idle and walk clips. Waving and pointing are layered on top by aiming the arm bones.
+// Faces +z by default.
 
-const SCALE = 0.9;
+const MODEL_URL = new URL('../assets/heidi.glb', import.meta.url).href;
+const SCALE = 1.04;
 
-export function createGuide() {
+export async function createGuide() {
+  const gltf = await new GLTFLoader().loadAsync(MODEL_URL);
   const group = new THREE.Group();
-  const body = new THREE.Group();
-  body.scale.setScalar(SCALE);
-  group.add(body);
-
-  const mat = (color, roughness = 0.6) => new THREE.MeshStandardMaterial({ color, roughness, envMapIntensity: 0.4 });
-  const skin = mat(0xf0d6c2, 0.55);
-  const sweater = mat(0x25335f, 0.85);
-  const skirt = mat(0x1a2343, 0.7);
-  const hair = mat(0x0b0b0e, 0.32);
-  const flats = mat(0x111114, 0.4);
-  const eyes = mat(0x16161a, 0.3);
-
-  const capsule = (r, len) => new THREE.CapsuleGeometry(r, len, 6, 16);
-  const mesh = (geo, m, x = 0, y = 0, z = 0, parent = body) => {
-    const o = new THREE.Mesh(geo, m);
-    o.position.set(x, y, z);
-    parent.add(o);
-    return o;
-  };
-  const pivot = (x, y) => {
-    const p = new THREE.Group();
-    p.position.set(x, y, 0);
-    body.add(p);
-    return p;
-  };
-
-  // Legs (bare calves below the skirt) and flats.
-  const [legL, legR] = [0.068, -0.068].map((x) => {
-    const p = pivot(x, 0.82);
-    mesh(capsule(0.043, 0.7), skin, 0, -0.4, 0, p);
-    const shoe = mesh(capsule(0.042, 0.14), flats, 0, -0.78, 0.04, p);
-    shoe.rotation.x = Math.PI / 2;
-    shoe.scale.set(1.05, 1, 0.55);
-    return p;
-  });
-
-  // Column skirt, waist to mid-calf.
-  const skirtMesh = mesh(new THREE.CylinderGeometry(0.128, 0.15, 0.62, 28), skirt, 0, 0.67);
-  skirtMesh.scale.z = 0.8;
-
-  // Sweater torso with a V neckline.
-  const torso = mesh(capsule(0.145, 0.32), sweater, 0, 1.18);
-  torso.scale.set(1, 1, 0.7);
-  const vShape = new THREE.Shape();
-  vShape.moveTo(-0.065, 0); vShape.lineTo(0.065, 0); vShape.lineTo(0, -0.13); vShape.closePath();
-  const vNeck = mesh(new THREE.ShapeGeometry(vShape), skin, 0, 1.445, 0.1);
-  vNeck.rotation.x = -0.32;
-  mesh(new THREE.CylinderGeometry(0.034, 0.038, 0.1, 14), skin, 0, 1.5);
-
-  // Arms in long sleeves, with hands.
-  const [armL, armR] = [0.163, -0.163].map((x) => {
-    const p = pivot(x, 1.42);
-    mesh(capsule(0.037, 0.44), sweater, 0, -0.26, 0, p);
-    mesh(new THREE.SphereGeometry(0.034, 14, 10), skin, 0, -0.52, 0, p);
-    return p;
-  });
-
-  // Head, eyes, hair.
-  const head = new THREE.Group();
-  head.position.y = 1.63;
-  body.add(head);
-  const skull = mesh(new THREE.SphereGeometry(0.105, 32, 20), skin, 0, 0, 0, head);
-  skull.scale.set(0.9, 1.1, 0.95);
-  for (const x of [-0.034, 0.034]) {
-    const e = mesh(new THREE.SphereGeometry(0.011, 10, 8), eyes, x, 0.012, 0.09, head);
-    e.scale.set(1.3, 0.8, 0.6);
-    e.userData.noOutline = true;
-  }
-  const cap = mesh(new THREE.SphereGeometry(0.112, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.52), hair, 0, 0.012, -0.004, head);
-  cap.scale.set(0.93, 1.1, 0.98);
-  cap.rotation.x = -0.18;
-  // Long straight curtain down the back and sides, to mid-back.
-  const curtainMat = hair.clone();
-  curtainMat.side = THREE.DoubleSide;
-  const curtain = mesh(
-    new THREE.CylinderGeometry(0.102, 0.125, 0.58, 32, 1, true, Math.PI / 2 - 0.35, Math.PI + 0.7),
-    curtainMat, 0, -0.27, -0.005, head,
-  );
-  curtain.scale.z = 0.92;
-  // Side-swept fringe: a thin shell of hair lying on the forehead, lower on one side.
-  const fringeMat = hair.clone();
-  fringeMat.side = THREE.DoubleSide;
-  const fringe = mesh(
-    new THREE.SphereGeometry(0.115, 32, 8, Math.PI / 2 - 1.1, 1.95, Math.PI * 0.27, Math.PI * 0.14),
-    fringeMat, 0, 0.012, 0, head,
-  );
-  fringe.scale.set(0.93, 1.1, 0.98);
-  fringe.rotation.z = -0.22;
-
+  const model = gltf.scene;
+  model.scale.setScalar(SCALE);
+  group.add(model);
   group.add(contactShadow(0.42, 0.32));
 
-  let phase = 0;
-  const damp = (a, b, k, dt) => a + (b - a) * Math.min(1, k * dt);
+  model.traverse((o) => {
+    if (!o.isMesh) return;
+    o.frustumCulled = false; // skinned bounds don't follow the animation
+    o.userData.noOutline = true; // ink outlines don't follow skinning
+    const m = o.material;
+    if (m.isMeshStandardMaterial) {
+      m.envMapIntensity = 0.5;
+      // Fabric and hair shouldn't shine like plastic under the studio environment.
+      if (/Cloth|Hair/.test(m.name)) m.roughness = Math.max(m.roughness, 0.85);
+    }
+  });
+
+  const bone = (name) => model.getObjectByName(name);
+  const mixer = new THREE.AnimationMixer(model);
+  const clip = (name) => gltf.animations.find((a) => a.name === name);
+  const idle = mixer.clipAction(clip('idle'));
+  const walk = mixer.clipAction(clip('walk'));
+  // The walk clip is in place; its extras say how fast it travels (m/s).
+  const walkSpeed = gltf.parser.json.animations?.find((a) => a.name === 'walk')?.extras?.rootMotion?.speed ?? 1.2;
+  idle.play();
+  walk.play();
+  walk.setEffectiveWeight(0);
+
+  // Arms, by which side of the body they're on (+x is her left when she faces +z).
+  const arms = ['l', 'r'].map((s) => ({ upper: bone(`upperarm_${s}`), lower: bone(`lowerarm_${s}`), hand: bone(`hand_${s}`), weight: 0 }));
+  model.updateMatrixWorld(true);
+  const wp = new THREE.Vector3();
+  arms.sort((a, b) => a.upper.getWorldPosition(wp).x - b.upper.getWorldPosition(new THREE.Vector3()).x);
+  const [armRight, armLeft] = arms; // -x first
+  const head = bone('head');
+
+  // Turn `b` so the direction to its child points along `dir` (in the guide's own space), blended by k.
+  const qA = new THREE.Quaternion();
+  const qB = new THREE.Quaternion();
+  const qParent = new THREE.Quaternion();
+  const from = new THREE.Vector3();
+  const to = new THREE.Vector3();
+  const childPos = new THREE.Vector3();
+  function aim(b, child, dir, k) {
+    if (k <= 0.001) return;
+    b.updateWorldMatrix(true, true);
+    b.getWorldPosition(wp);
+    child.getWorldPosition(childPos);
+    from.subVectors(childPos, wp).normalize();
+    to.copy(dir).normalize().transformDirection(group.matrixWorld);
+    qA.setFromUnitVectors(from, to);
+    b.getWorldQuaternion(qB);
+    qB.premultiply(qA);
+    b.parent.getWorldQuaternion(qParent);
+    qB.premultiply(qParent.invert());
+    b.quaternion.slerp(qB, k);
+  }
+
+  const dirUp = new THREE.Vector3();
+  const dirFore = new THREE.Vector3();
+  let walkW = 0;
+  let waveW = 0;
 
   /** state: { walking, speed, waving, point: -1 | 0 | 1 (local side) } */
   function update(dt, t, state) {
-    if (state.walking) phase += dt * (5 + state.speed * 1.4);
-    const swing = state.walking ? Math.sin(phase) : 0;
-    legL.rotation.x = damp(legL.rotation.x, swing * 0.32, 12, dt);
-    legR.rotation.x = damp(legR.rotation.x, -swing * 0.32, 12, dt);
-    armL.rotation.x = damp(armL.rotation.x, state.point > 0 ? 0 : -swing * 0.4, 12, dt);
-    armR.rotation.x = damp(armR.rotation.x, state.point < 0 || state.waving ? 0 : swing * 0.4, 12, dt);
+    walkW += ((state.walking ? 1 : 0) - walkW) * Math.min(1, dt * 6);
+    walk.setEffectiveWeight(walkW);
+    idle.setEffectiveWeight(1 - walkW);
+    walk.timeScale = THREE.MathUtils.clamp((state.speed || walkSpeed) / walkSpeed, 0.7, 1.8);
+    mixer.update(dt);
+    group.updateMatrixWorld(true);
 
-    let zL = 0.07, zR = -0.07;
-    if (state.waving) zR = -2.55 + Math.sin(t * 7) * 0.28;
-    if (state.point > 0) zL = 1.3 + Math.sin(t * 2) * 0.05;
-    if (state.point < 0) zR = -1.3 - Math.sin(t * 2) * 0.05;
-    armL.rotation.z = damp(armL.rotation.z, zL, 7, dt);
-    armR.rotation.z = damp(armR.rotation.z, zR, 7, dt);
+    // Wave with the right hand in the intro.
+    waveW += ((state.waving ? 1 : 0) - waveW) * Math.min(1, dt * 5);
+    const swing = Math.sin(t * 7) * 0.35;
+    aim(armRight.upper, armRight.lower, dirUp.set(-0.75, 0.55, 0.25), waveW);
+    aim(armRight.lower, armRight.hand, dirFore.set(-0.15 + swing, 1, 0.15), waveW);
 
-    body.position.y = state.walking ? Math.abs(Math.cos(phase)) * 0.025 : Math.sin(t * 1.6) * 0.005;
-    head.rotation.z = state.waving ? Math.sin(t * 1.8) * 0.07 : damp(head.rotation.z, 0, 4, dt);
+    // Point at a portal with the arm on that side.
+    for (const [arm, side] of [[armLeft, 1], [armRight, -1]]) {
+      arm.weight += ((state.point === side && !state.waving ? 1 : 0) - arm.weight) * Math.min(1, dt * 5);
+      const lift = Math.sin(t * 2) * 0.03;
+      aim(arm.upper, arm.lower, dirUp.set(side, 0.2 + lift, 0.35), arm.weight);
+      aim(arm.lower, arm.hand, dirFore.set(side, 0.28 + lift, 0.45), arm.weight);
+    }
+
+    if (state.waving) head.rotation.z += Math.sin(t * 1.8) * 0.07;
   }
 
   const tmp = new THREE.Vector3();
+  const aboveHead = new THREE.Vector3(0, 0.16, 0);
   function headWorld() {
-    return group.localToWorld(tmp.set(0, 1.85 * SCALE, 0));
+    return head.getWorldPosition(tmp).add(aboveHead);
   }
 
   return { group, update, headWorld };

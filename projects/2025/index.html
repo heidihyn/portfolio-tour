@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Heidi's 2025 experience: a 1920s mafia night in a speakeasy.">
+<title>2025 · 1920s Mafia Speakeasy · Heidi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Limelight&family=Manrope:wght@400;600;700&display=swap">
+<style>
+  /* 2025 · 1920s mafia speakeasy. Placeholder page in the portal's theme: oxblood walls,
+     brass art deco trim, a sunburst, and lamplight. The full page comes later. */
+  :root {
+    color-scheme: dark;
+    --oxblood: #3a0710;
+    --oxblood-deep: #1c0306;
+    --brass: #d9a64e;
+    --lamp: #ffc27a;
+    --paper: #f3e6cf;
+    --deco: "Limelight", Georgia, serif;
+    --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    min-height: 100vh; min-height: 100dvh;
+    display: grid; place-items: center; padding: 32px 16px;
+    font-family: var(--body); color: var(--paper);
+    background:
+      repeating-conic-gradient(from -90deg at 50% 100%, rgba(217, 166, 78, 0.10) 0 4deg, transparent 4deg 13.8deg),
+      radial-gradient(ellipse at 50% 0%, #5a0d18, var(--oxblood) 45%, var(--oxblood-deep));
+  }
+  .door {
+    width: min(540px, 100%); padding: 48px 32px 32px; text-align: center;
+    background: linear-gradient(var(--oxblood-deep), #12020a);
+    border: 2px solid var(--brass); outline: 1px solid var(--brass); outline-offset: 7px;
+    border-radius: 140px 140px 6px 6px;
+    box-shadow: 0 0 80px rgba(255, 194, 122, 0.15);
+  }
+  .slot { width: 120px; height: 10px; margin: 0 auto 28px; border-radius: 5px; background: var(--lamp); box-shadow: 0 0 22px var(--lamp); }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.4em; color: var(--brass); margin: 0 0 12px; }
+  h1 { font-family: var(--deco); font-weight: 400; font-size: clamp(28px, 6vw, 42px); line-height: 1.15; margin: 0 0 18px; color: var(--brass); text-wrap: balance; }
+  p { line-height: 1.6; margin: 0 0 20px; color: rgba(243, 230, 207, 0.8); }
+  ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; list-style: none; padding: 0; margin: 0 0 28px; }
+  li { font-size: 13px; font-weight: 600; padding: 6px 12px; border: 1px solid rgba(217, 166, 78, 0.5); color: var(--paper); }
+  a.back { display: inline-block; font-weight: 700; font-size: 14px; color: var(--oxblood-deep); background: var(--brass); padding: 11px 18px; text-decoration: none; letter-spacing: 0.04em; }
+  a.back:hover { background: var(--lamp); }
+  a.back:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+</style>
+</head>
+<body>
+  <main class="door">
+    <div class="slot" aria-hidden="true"></div>
+    <p class="eyebrow">2025 · EXPERIENCE</p>
+    <h1>1920s Mafia Speakeasy</h1>
+    <ul><li>1920s</li><li>Mafia</li><li>Speakeasy</li></ul>
+    <p>The password is still a secret. The full story of this night is coming soon.</p>
+    <a class="back" href="../../#2025">← Back to the hallway</a>
+  </main>
+</body>
+</html>
