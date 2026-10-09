@@ -3,64 +3,907 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Heidi's 2024 birthday: minigolf, trivia, and food trucks.">
-<title>2024 · Minigolf, Trivia &amp; Food Trucks · Heidi</title>
+<meta name="description" content="Heidi's 2024 birthday: a round of minigolf at Stagecoach Greens, a food-truck supper, and a trivia showdown between friend groups.">
+<title>2024 · Minigolf &amp; Trivia Night · Heidi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Manrope:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap">
 <style>
-  /* 2024 · Birthday party. Placeholder page in the portal's theme: a sunny mown fairway,
-     coral pin flag, golf-ball white and sunshine yellow. The full page comes later. */
+  /* 2024 · Birthday Minigolf & Trivia Night. Autumn country-club: forest green and paper cream,
+     rust and ochre leaves, a soft serif with a wink. Light-only, like the other portal pages. */
   :root {
     color-scheme: light;
-    --grass: #3f9a4a;
-    --grass-dark: #2f7d3a;
-    --grass-light: #7be06a;
-    --coral: #ff5a4e;
-    --sun: #ffcf3f;
-    --ball: #fbfbf7;
-    --ink: #13311b;
-    --display: "Syncopate", "Arial Black", sans-serif;
+    --paper: #f7f0e3;
+    --paper-2: #efe4cf;
+    --card: #fffaf1;
+    --forest: #1f3a2c;
+    --forest-2: #2c4d3a;
+    --moss: #56723d;
+    --fairway: #4d7a45;
+    --fairway-dark: #3f6839;
+    --rust: #b4532a;
+    --ochre: #cf9526;
+    --plum: #6e2f3d;
+    --ink: #1d241f;
+    --muted: #5f675c;
+    --line: rgba(31, 58, 44, 0.14);
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
     --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+    --radius: 22px;
+    --shadow: 0 1px 0 rgba(255,255,255,0.7) inset, 0 18px 40px -24px rgba(31, 40, 25, 0.45);
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  html, body { margin: 0; }
   body {
-    min-height: 100vh; min-height: 100dvh;
-    display: grid; place-items: center; padding: 32px 16px;
-    font-family: var(--body); color: var(--ink);
-    background:
-      radial-gradient(circle at 50% 108%, var(--sun) 0 9%, transparent 9.2%),
-      repeating-linear-gradient(90deg, var(--grass) 0 64px, var(--grass-dark) 64px 128px);
+    font-family: var(--body); color: var(--ink); background: var(--paper);
+    line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden;
   }
-  .card {
-    position: relative; width: min(560px, 100%);
-    padding: 40px 32px 32px; border-radius: 28px;
-    background: var(--ball);
-    background-image: radial-gradient(rgba(19, 49, 27, 0.06) 22%, transparent 24%);
-    background-size: 18px 18px;
-    box-shadow: 0 24px 60px rgba(10, 40, 15, 0.35);
+  /* Paper grain */
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.18 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  .flag { position: absolute; top: -46px; right: 40px; width: 4px; height: 92px; background: var(--ink); border-radius: 2px; }
-  .flag::after { content: ""; position: absolute; left: 4px; top: 0; border-left: 46px solid var(--coral); border-top: 15px solid transparent; border-bottom: 15px solid transparent; }
-  .eyebrow { font-family: var(--display); font-size: 11px; letter-spacing: 0.32em; color: var(--grass-dark); margin: 0 0 12px; }
-  h1 { font-family: var(--display); font-size: clamp(22px, 5vw, 32px); line-height: 1.2; margin: 0 0 16px; text-wrap: balance; }
-  p { line-height: 1.6; margin: 0 0 20px; color: #3c5a42; }
-  ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 28px; }
-  li { font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: #e9f7e4; color: var(--grass-dark); }
-  a.back { display: inline-block; font-weight: 700; font-size: 14px; color: var(--ball); background: var(--ink); padding: 11px 18px; border-radius: 999px; text-decoration: none; }
-  a.back:hover { background: var(--grass-dark); }
-  a.back:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
+  main, header, footer { position: relative; z-index: 1; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--ochre); outline-offset: 3px; border-radius: 6px; }
+
+  .wrap { width: min(1080px, 100%); margin: 0 auto; padding: 0 16px; }
+  @media (min-width: 720px) { .wrap { padding: 0 32px; } }
+
+  /* ---------- Top bar ---------- */
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0; }
+  .back {
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+    font-weight: 700; font-size: 14px; color: var(--forest);
+    padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,250,241,0.7);
+  }
+  .back:hover { background: var(--card); }
+  @media (max-width: 420px) { .monogram { display: none; } }
+  .monogram { font-family: var(--display); font-style: italic; font-size: 15px; color: var(--muted); }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; padding: 28px 0 64px; overflow: hidden; }
+  .hero-grid { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.15fr 0.85fr; } }
+  .eyebrow {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: var(--rust);
+    margin: 0 0 18px; display: flex; flex-wrap: wrap; gap: 6px 14px;
+  }
+  .eyebrow span + span::before { content: "·"; margin-right: 14px; color: var(--ochre); }
+  h1 {
+    font-family: var(--display); font-weight: 600; font-size: clamp(40px, 8.4vw, 84px);
+    line-height: 0.98; letter-spacing: -0.02em; margin: 0 0 22px; color: var(--forest); text-wrap: balance;
+    font-variation-settings: "opsz" 144;
+  }
+  h1 em { font-style: italic; font-weight: 400; color: var(--rust); }
+  .lede { font-size: clamp(17px, 2.2vw, 20px); color: #3f4a3f; max-width: 34em; margin: 0 0 30px; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    appearance: none; border: 0; cursor: pointer; font: inherit; font-weight: 700; font-size: 15px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;
+    padding: 13px 20px; border-radius: 999px; transition: transform .15s ease, background .15s ease;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--forest); color: var(--paper); }
+  .btn-primary:hover { background: var(--forest-2); }
+  .btn-ghost { background: transparent; color: var(--forest); box-shadow: inset 0 0 0 1.5px var(--forest); }
+  .btn-ghost:hover { background: rgba(31,58,44,0.06); }
+  .btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+  /* Scorecard ticket */
+  .ticket {
+    position: relative; background: var(--card); border-radius: var(--radius); padding: 26px 24px;
+    box-shadow: var(--shadow); border: 1px solid var(--line); transform: rotate(1.2deg);
+  }
+  .ticket::before, .ticket::after {
+    content: ""; position: absolute; top: 50%; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--paper); transform: translateY(-50%); border: 1px solid var(--line);
+  }
+  .ticket::before { left: -12px; } .ticket::after { right: -12px; }
+  .ticket h2 { font-family: var(--display); font-weight: 600; font-size: 22px; margin: 0 0 4px; color: var(--forest); }
+  .ticket .sub { font-size: 13px; color: var(--muted); margin: 0 0 18px; }
+  .ticket dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; font-size: 15px; }
+  .ticket dt { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--moss); padding-top: 3px; }
+  .ticket dd { margin: 0; font-weight: 600; }
+  .ticket .stub { margin-top: 20px; padding-top: 16px; border-top: 2px dashed var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); }
+  .ticket .stub b { font-family: var(--display); font-size: 26px; color: var(--rust); font-weight: 800; }
+
+  /* Drifting leaves */
+  .leaves { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .leaf { position: absolute; top: -40px; width: 22px; height: 22px; opacity: .85; animation: fall linear infinite; }
+  @keyframes fall {
+    0% { transform: translate3d(0, -40px, 0) rotate(0deg); }
+    50% { transform: translate3d(40px, 50vh, 0) rotate(180deg); }
+    100% { transform: translate3d(-20px, 105vh, 0) rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { .leaf { display: none; } }
+
+  /* ---------- Sections ---------- */
+  section { padding: 64px 0; }
+  .section-head { margin-bottom: 28px; max-width: 40em; }
+  .kicker { font-size: 12px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--rust); margin: 0 0 10px; }
+  h2.title { font-family: var(--display); font-weight: 600; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 12px; color: var(--forest); text-wrap: balance; }
+  h2.title em { font-style: italic; font-weight: 400; color: var(--rust); }
+  .section-head p { margin: 0; color: var(--muted); font-size: 17px; }
+  .band { background: var(--paper-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .band-dark { background: var(--forest); color: var(--paper); }
+  .band-dark h2.title { color: var(--paper); }
+  .band-dark h2.title em { color: #f0b46a; }
+  .band-dark .section-head p { color: #c9d2c3; }
+  .band-dark .kicker { color: #f0b46a; }
+
+  /* Invitation letter */
+  .letter { display: grid; gap: 32px; }
+  @media (min-width: 860px) { .letter { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .letter .note { font-family: var(--display); font-size: clamp(20px, 2.6vw, 24px); line-height: 1.5; color: var(--forest); margin: 0; }
+  .letter .note::first-letter { font-size: 3.1em; float: left; line-height: .9; padding: 6px 10px 0 0; color: var(--rust); font-weight: 600; }
+  .sig { font-family: var(--display); font-style: italic; color: var(--rust); font-size: 22px; margin-top: 16px; }
+  .facts { display: grid; gap: 12px; }
+  .fact { display: flex; gap: 14px; padding: 16px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+  .fact .ico { flex: 0 0 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: #f1e3c9; color: var(--rust); }
+  .fact h3 { margin: 0 0 2px; font-size: 15px; }
+  .fact p { margin: 0; font-size: 14.5px; color: var(--muted); }
+  .fact a { color: var(--forest); font-weight: 700; text-underline-offset: 3px; }
+
+  /* Timeline */
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  @media (min-width: 860px) { .timeline { grid-template-columns: repeat(5, 1fr); gap: 16px; } }
+  .timeline li {
+    position: relative; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 18px; padding: 18px 18px 20px;
+  }
+  .timeline .time { font-family: var(--display); font-size: 24px; font-weight: 600; color: #f0b46a; line-height: 1.1; }
+  .timeline .time small { font-family: var(--body); font-size: 12px; font-weight: 600; color: #c9d2c3; display: block; margin-top: 4px; letter-spacing: .04em; }
+  .timeline h3 { margin: 12px 0 4px; font-size: 16px; color: var(--paper); }
+  .timeline p { margin: 0; font-size: 14px; color: #c9d2c3; }
+  .timeline .hole { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 800; letter-spacing: .14em; color: #8fa58a; }
+
+  /* Tips */
+  .tips { display: grid; gap: 14px; }
+  @media (min-width: 720px) { .tips { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .tips { grid-template-columns: repeat(3, 1fr); } }
+  .tip { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); }
+  .tip .num { font-family: var(--display); font-style: italic; color: var(--ochre); font-size: 20px; }
+  .tip h3 { margin: 4px 0 6px; font-size: 17px; color: var(--forest); }
+  .tip p { margin: 0; font-size: 15px; color: var(--muted); }
+  .tip a { color: var(--forest); font-weight: 700; text-underline-offset: 3px; }
+
+  /* ---------- Golf game ---------- */
+  .game { display: grid; gap: 28px; align-items: start; }
+  @media (min-width: 900px) { .game { grid-template-columns: 0.9fr 1.1fr; } }
+  .game-copy ol { padding-left: 20px; margin: 0 0 22px; color: var(--muted); }
+  .game-copy li { margin-bottom: 6px; }
+  .teams { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .team-chip { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); font-size: 14px; font-weight: 700; }
+  .team-chip i { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+  .team-chip small { display: block; font-weight: 500; color: var(--muted); font-size: 12px; }
+  .course {
+    position: relative; border-radius: 26px; padding: 14px; background: linear-gradient(160deg, #8a5a33, #6b4224);
+    box-shadow: var(--shadow), inset 0 2px 0 rgba(255,255,255,.15); max-width: 460px; width: 100%; justify-self: center;
+  }
+  .course canvas { display: block; width: 100%; height: auto; border-radius: 16px; touch-action: none; cursor: crosshair; background: var(--fairway); }
+  .course-hud { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; color: #f6e7cf; font-size: 13px; font-weight: 700; }
+  .course-hud button { appearance: none; border: 0; font: inherit; font-weight: 700; font-size: 13px; color: #6b4224; background: #f6e7cf; padding: 7px 12px; border-radius: 999px; cursor: pointer; }
+  .result {
+    margin-top: 18px; padding: 20px; border-radius: 18px; background: var(--card); border: 1px solid var(--line);
+    box-shadow: var(--shadow); display: none;
+  }
+  .result.show { display: block; animation: rise .45s cubic-bezier(.2,.8,.2,1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .result .kicker { margin-bottom: 4px; }
+  .result h3 { font-family: var(--display); font-size: 30px; margin: 0 0 4px; font-weight: 600; }
+  .result p { margin: 0 0 14px; color: var(--muted); }
+
+  /* ---------- Trivia categories ---------- */
+  .cats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (min-width: 720px) { .cats { grid-template-columns: repeat(4, 1fr); } }
+  .cat {
+    appearance: none; font: inherit; text-align: left; cursor: pointer; color: var(--ink);
+    display: flex; flex-direction: column; gap: 10px; padding: 16px; min-height: 120px;
+    border-radius: 18px; background: var(--card); border: 1.5px solid var(--line);
+    transition: border-color .15s ease, transform .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .cat:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .cat .glyph { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: #f1e3c9; color: var(--rust); }
+  .cat b { font-size: 15.5px; }
+  .cat small { color: var(--muted); font-size: 13px; line-height: 1.4; }
+  .cat[aria-pressed="true"] { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+  .cat[aria-pressed="true"] small { color: #c9d2c3; }
+  .cat[aria-pressed="true"] .glyph { background: #f0b46a; color: var(--forest); }
+  .cat .check { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; font-size: 13px; }
+  .cat[aria-pressed="true"] .check { background: #f0b46a; border-color: #f0b46a; color: var(--forest); }
+  .cat .row { display: flex; align-items: center; }
+  .profile { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; border-radius: 18px; background: var(--paper-2); border: 1px solid var(--line); }
+  .profile p { margin: 0; font-size: 15.5px; }
+  .profile strong { color: var(--forest); }
+
+  /* ---------- Trivia demo ---------- */
+  .quiz {
+    background: var(--card); border-radius: 28px; border: 1px solid var(--line); box-shadow: var(--shadow);
+    overflow: hidden; color: var(--ink);
+  }
+  .quiz-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 700; color: var(--muted); }
+  .quiz-bar .pill { padding: 5px 10px; border-radius: 999px; background: var(--paper-2); color: var(--forest); }
+  .quiz-body { padding: 26px 20px 24px; }
+  @media (min-width: 720px) { .quiz-body { padding: 36px 40px 34px; } }
+  .timer { height: 6px; border-radius: 999px; background: var(--paper-2); overflow: hidden; margin-bottom: 22px; }
+  .timer > i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, var(--rust), var(--ochre)); transform-origin: left; }
+  .q-cat { font-size: 12px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--rust); margin: 0 0 8px; }
+  .q-text { font-family: var(--display); font-size: clamp(24px, 3.6vw, 34px); line-height: 1.2; font-weight: 600; color: var(--forest); margin: 0 0 24px; text-wrap: balance; }
+  .answers { display: grid; gap: 10px; }
+  @media (min-width: 640px) { .answers { grid-template-columns: 1fr 1fr; gap: 12px; } }
+  .ans {
+    appearance: none; font: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px; border-radius: 16px; border: 1.5px solid var(--line); background: #fff; color: var(--ink);
+    font-weight: 600; font-size: 16px; transition: transform .12s ease, border-color .12s ease, background .12s ease;
+  }
+  .ans:hover:not([disabled]) { transform: translateY(-2px); border-color: var(--forest); }
+  .ans .key { flex: none; width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #fff; }
+  .ans:nth-child(1) .key { background: var(--rust); }
+  .ans:nth-child(2) .key { background: var(--fairway); }
+  .ans:nth-child(3) .key { background: var(--ochre); }
+  .ans:nth-child(4) .key { background: var(--plum); }
+  .ans.correct { background: #e7f0df; border-color: var(--moss); }
+  .ans.wrong { background: #f7e1d8; border-color: var(--rust); }
+  .ans[disabled] { cursor: default; }
+  .ans[disabled]:not(.correct):not(.wrong) { opacity: .55; }
+  .feedback { min-height: 28px; margin-top: 18px; font-weight: 700; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+  .feedback .good { color: var(--moss); } .feedback .bad { color: var(--rust); }
+  .quiz-center { text-align: center; padding: 18px 0; }
+  .quiz-center h3 { font-family: var(--display); font-size: clamp(28px, 4vw, 40px); margin: 0 0 8px; color: var(--forest); font-weight: 600; }
+  .quiz-center p { color: var(--muted); margin: 0 auto 22px; max-width: 32em; }
+  .bigscore { font-family: var(--display); font-size: 64px; font-weight: 800; color: var(--rust); line-height: 1; margin: 6px 0 4px; }
+  .recap { list-style: none; padding: 0; margin: 0 auto 24px; max-width: 520px; text-align: left; display: grid; gap: 8px; }
+  .recap li { display: flex; gap: 10px; justify-content: space-between; padding: 10px 14px; border-radius: 12px; background: var(--paper); font-size: 14px; }
+  .recap li span:last-child { font-weight: 800; white-space: nowrap; }
+
+  .recommend { margin-top: 28px; display: grid; gap: 12px; }
+  @media (min-width: 860px) { .recommend { grid-template-columns: repeat(3, 1fr); } }
+
+  footer { padding: 48px 0 56px; text-align: center; color: var(--muted); font-size: 14px; }
+  footer .ball { width: 34px; height: 34px; margin: 0 auto 14px; border-radius: 50%; background: #fff; box-shadow: inset -4px -5px 0 rgba(0,0,0,.06), 0 6px 14px -6px rgba(0,0,0,.3);
+    background-image: radial-gradient(rgba(0,0,0,.08) 20%, transparent 22%); background-size: 6px 6px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 </style>
 </head>
 <body>
-  <main class="card">
-    <span class="flag" aria-hidden="true"></span>
-    <p class="eyebrow">2024 · BIRTHDAY PARTY</p>
-    <h1>Minigolf, Trivia &amp; Food Trucks</h1>
-    <ul><li>Minigolf</li><li>Trivia</li><li>Food trucks</li></ul>
-    <p>The full story of this party is coming soon.</p>
-    <a class="back" href="../../#2024">← Back to the hallway</a>
-  </main>
+
+<header class="wrap topbar">
+  <a class="back" href="../../#2024">← Back to the hallway</a>
+  <span class="monogram">Hosted by Heidi · 2024</span>
+</header>
+
+<main>
+  <!-- ======================= HERO ======================= -->
+  <div class="hero">
+    <div class="leaves" aria-hidden="true" id="leaves"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow"><span>Saturday, October 12</span><span>5:45pm</span><span>Stagecoach Greens</span></p>
+        <h1>Birthday Minigolf <em>&amp;</em> Trivia Night</h1>
+        <p class="lede">A round of mini golf, a food-truck supper, and a friendly trivia showdown between friend groups, all to celebrate Heidi's 25th.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#team">Putt for your team</a>
+          <a class="btn btn-ghost" href="#evening">See the evening</a>
+        </div>
+      </div>
+      <aside class="ticket" aria-label="Event at a glance">
+        <h2>The scorecard</h2>
+        <p class="sub">Everything you need, at a glance.</p>
+        <dl>
+          <dt>When</dt><dd>Sat, Oct 12, 2024 · first tee 5:45pm</dd>
+          <dt>Where</dt><dd><a href="https://www.stagecoachgreens.com/cms/" target="_blank" rel="noopener">Stagecoach Greens</a></dd>
+          <dt>Dress</dt><dd>Dressy casual, loosely</dd>
+          <dt>Bring</dt><dd>Your trivia people, up to three</dd>
+          <dt>Prize</dt><dd>Winners pick the afterparty songs</dd>
+        </dl>
+        <div class="stub"><span>Course &amp; Bungalow reserved</span><b>25</b></div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ======================= INVITATION ======================= -->
+  <section class="band" id="invite">
+    <div class="wrap letter">
+      <div>
+        <p class="kicker">The invitation</p>
+        <p class="note">Join me for a round of mini golf at Stagecoach Greens, then team up with your friends and loved ones to take on my other friend groups at trivia. Come for the golf, stay for the rivalry, and leave as friends with everyone.</p>
+        <p class="sig">— Heidi</p>
+      </div>
+      <div class="facts">
+        <div class="fact">
+          <div class="ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 21V3l11 4-11 4"/></svg></div>
+          <div><h3>Tee times are firm</h3><p>Our round is reserved at 5:45pm and 6:00pm, and the times are not approximate. Please arrive on time.</p></div>
+        </div>
+        <div class="fact">
+          <div class="ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c.6-3.4 3-5.4 6-5.4s5.4 2 6 5.4M15 14.6c2.8-.4 5 1.3 5.8 4.4"/></svg></div>
+          <div><h3>Bring your people</h3><p>Plus-ones, up to three, are welcome. Share the invite with anyone you'd want on your trivia team.</p></div>
+        </div>
+        <div class="fact">
+          <div class="ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></div>
+          <div><h3>Play for the playlist</h3><p>Every member of the winning trivia team picks a song for the afterparty.</p></div>
+        </div>
+        <div class="fact">
+          <div class="ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l2.2 3.6 4.1-.6-1.4 3.9L20 13l-4 .9-.6 4.1L12 16l-3.4 2-.6-4.1L4 13l3.1-3.1L5.7 6l4.1.6z"/></svg></div>
+          <div><h3>Dressy casual, loosely</h3><p>A guideline, not a rule. Wear whatever feels good. <a href="https://www.cosmopolitan.com/style-beauty/fashion/a30474742/dressy-casual-dress-code-meaning/" target="_blank" rel="noopener">What's dressy casual?</a></p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= EVENING ======================= -->
+  <section class="band-dark" id="evening">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Run of show</p>
+        <h2 class="title">The evening, <em>hole by hole</em></h2>
+        <p>A round takes 45 to 60 minutes, so the first tee times roll right into supper.</p>
+      </div>
+      <ol class="timeline">
+        <li><span class="hole">HOLE 1</span><div class="time">5:45 &amp; 6:00<small>PM</small></div><h3>Tee off</h3><p>Two reserved tee times. A round runs 45 to 60 minutes.</p></li>
+        <li><span class="hole">HOLE 2</span><div class="time">6:30–7:30<small>PM, ROUGHLY</small></div><h3>Food trucks</h3><p>Supper from the trucks on site.</p></li>
+        <li><span class="hole">HOLE 3</span><div class="time">7:00<small>PM</small></div><h3>The Bungalow opens</h3><p>Our reserved home base for the rest of the night.</p></li>
+        <li><span class="hole">HOLE 4</span><div class="time">7:30–8:15<small>PM</small></div><h3>Trivia</h3><p>Your team against Heidi's other friend groups.</p></li>
+        <li><span class="hole">HOLE 5</span><div class="time">8:15–9:00<small>PM</small></div><h3>Afterparty</h3><p>The winners' song picks take over the speakers.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ======================= TIPS ======================= -->
+  <section id="tips">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Good to know</p>
+        <h2 class="title">Tips from <em>the clubhouse</em></h2>
+      </div>
+      <div class="tips">
+        <article class="tip"><span class="num">i.</span><h3>Be on the green on time</h3><p>The course and the Bungalow are reserved for us, and tee times won't hold. Aim for 5:45pm or 6:00pm sharp.</p></article>
+        <article class="tip"><span class="num">ii.</span><h3>Build your trivia team early</h3><p>Teams are friend groups. Invite the people you'd want beside you, and pick your categories below so we know your strengths.</p></article>
+        <article class="tip"><span class="num">iii.</span><h3>Save room for supper</h3><p>The food trucks run from about 6:30pm to 7:30pm, right after your round.</p></article>
+        <article class="tip"><span class="num">iv.</span><h3>Find the Bungalow</h3><p>It's ours from 7:00pm, and trivia starts there at 7:30pm.</p></article>
+        <article class="tip"><span class="num">v.</span><h3>Dress for a course</h3><p>Dressy casual is the guide. Whatever you wear, you'll be on your feet for a round of golf.</p></article>
+        <article class="tip"><span class="num">vi.</span><h3>Scout the course</h3><p>Take a peek at <a href="https://www.stagecoachgreens.com/cms/" target="_blank" rel="noopener">Stagecoach Greens</a> before you go.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= GOLF TEAM GAME ======================= -->
+  <section class="band" id="team">
+    <div class="wrap game">
+      <div class="game-copy">
+        <p class="kicker">Interactive · Team draw</p>
+        <h2 class="title">Sink a putt, <em>meet your team</em></h2>
+        <p style="color:var(--muted);font-size:17px;margin:0 0 18px">Four holes, four teams. Wherever your ball drops is where you'll sit for trivia.</p>
+        <ol>
+          <li>Press on the ball and pull back, like a slingshot.</li>
+          <li>The further you pull, the harder the putt.</li>
+          <li>Let go. Mind the pumpkins.</li>
+        </ol>
+        <div class="teams" id="teamList"></div>
+        <div class="result" id="teamResult" role="status" aria-live="polite">
+          <p class="kicker">You're on</p>
+          <h3 id="teamName"></h3>
+          <p id="teamLine"></p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#categories">Pick your categories</a>
+            <button class="btn btn-ghost" type="button" id="puttAgain">Putt again</button>
+          </div>
+        </div>
+      </div>
+      <div class="course">
+        <canvas id="green" width="400" height="560" aria-label="Mini golf green. Drag back from the ball and release to putt. Each of the four holes is a trivia team."></canvas>
+        <div class="course-hud"><span id="strokes">Stroke 0</span><span id="hint">Pull back from the ball</span><button type="button" id="resetBall">Reset ball</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TRIVIA CATEGORIES ======================= -->
+  <section id="categories">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Interactive · Your strengths</p>
+        <h2 class="title">What are you <em>good at?</em></h2>
+        <p>Pick the categories you'd want to answer for your team. Choose as many as you like.</p>
+      </div>
+      <div class="cats" id="cats"></div>
+      <div class="profile">
+        <p id="profileLine">Pick a category or two and we'll know where you shine.</p>
+        <a class="btn btn-primary" href="#trivia" id="toQuiz">Warm up with trivia</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TRIVIA DEMO ======================= -->
+  <section class="band-dark" id="trivia">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Interactive · Warm-up round</p>
+        <h2 class="title">A five-question <em>warm-up</em></h2>
+        <p>Questions come from the categories you picked. Faster answers earn more points.</p>
+      </div>
+      <div class="quiz" id="quiz" aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="ball" aria-hidden="true"></div>
+  <p>Birthday Minigolf &amp; Trivia Night · Stagecoach Greens · October 12, 2024</p>
+  <p><a class="back" href="../../#2024">← Back to the hallway</a></p>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem('mg24:' + k)); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem('mg24:' + k, JSON.stringify(v)); } catch { /* storage unavailable */ } },
+  };
+
+  /* ---------------- Leaves ---------------- */
+  const leafColors = ['#b4532a', '#cf9526', '#6e2f3d', '#d77a3a', '#8a5a33'];
+  const leafHost = document.getElementById('leaves');
+  if (!reduceMotion) {
+    for (let i = 0; i < 12; i++) {
+      const c = leafColors[i % leafColors.length];
+      const el = document.createElement('div');
+      el.className = 'leaf';
+      el.style.left = (Math.random() * 100) + '%';
+      el.style.animationDuration = (14 + Math.random() * 14) + 's';
+      el.style.animationDelay = (-Math.random() * 28) + 's';
+      const s = 14 + Math.random() * 14;
+      el.style.width = el.style.height = s + 'px';
+      el.innerHTML = `<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="${c}" d="M12 2c1 2.6 3.2 3 5 2.4-.4 2 .4 3.4 2.6 4-1.6 1-2 2.6-1.2 4.4-2-.2-3.2.8-3.4 2.8-1.4-1.2-3-1.2-4 .4V22h-2v-6c-1-1.6-2.6-1.6-4-.4-.2-2-1.4-3-3.4-2.8.8-1.8.4-3.4-1.2-4.4 2.2-.6 3-2 2.6-4C8.8 5 11 4.6 12 2z"/></svg>`;
+      leafHost.appendChild(el);
+    }
+  }
+
+  /* ---------------- Teams ---------------- */
+  const TEAMS = [
+    { id: 'birdies',   name: 'The Birdies',   color: '#b4532a', line: 'One under par and proud of it. Expect quick answers and quicker celebrations.' },
+    { id: 'eagles',    name: 'The Eagles',    color: '#2c4d3a', line: 'Two under, sharp-eyed, and here to win the playlist.' },
+    { id: 'bogeys',    name: 'The Bogeys',    color: '#6e2f3d', line: 'A stroke over on the course, but never on the scoreboard.' },
+    { id: 'mulligans', name: 'The Mulligans', color: '#cf9526', line: 'Everyone deserves a second shot. This team takes theirs at trivia.' },
+  ];
+  document.getElementById('teamList').innerHTML = TEAMS.map(t =>
+    `<div class="team-chip"><i style="background:${t.color}"></i><span>${t.name}</span></div>`).join('');
+
+  /* ---------------- Golf ---------------- */
+  const canvas = document.getElementById('green');
+  const ctx = canvas.getContext('2d');
+  const W = 400, H = 560, BALL_R = 8, HOLE_R = 14;
+  const START = { x: W / 2, y: H - 64 };
+  const HOLES = [
+    { x: 78,  y: 92,  team: TEAMS[0] },
+    { x: 322, y: 92,  team: TEAMS[1] },
+    { x: 92,  y: 262, team: TEAMS[2] },
+    { x: 308, y: 262, team: TEAMS[3] },
+  ];
+  // Pumpkins are round bumpers.
+  const PUMPKINS = [
+    { x: 200, y: 168, r: 30 },
+    { x: 200, y: 336, r: 22 },
+    { x: 118, y: 412, r: 18 },
+    { x: 282, y: 412, r: 18 },
+  ];
+  const MAX_PULL = 130, MAX_SPEED = 15, FRICTION = 0.982, BOUNCE = 0.72;
+
+  const ball = { x: START.x, y: START.y, vx: 0, vy: 0, sunk: null, sinkT: 0 };
+  let strokes = 0, aiming = false, aim = { x: 0, y: 0 };
+  const strokesEl = document.getElementById('strokes');
+  const hintEl = document.getElementById('hint');
+
+  function sizeCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  sizeCanvas();
+  window.addEventListener('resize', sizeCanvas);
+
+  function toLocal(e) {
+    const r = canvas.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+  }
+  const moving = () => Math.hypot(ball.vx, ball.vy) > 0.04;
+
+  canvas.addEventListener('pointerdown', e => {
+    if (ball.sunk || moving()) return;
+    canvas.setPointerCapture(e.pointerId);
+    aiming = true; aim = toLocal(e);
+    e.preventDefault();
+  });
+  canvas.addEventListener('pointermove', e => { if (aiming) aim = toLocal(e); });
+  function release(e) {
+    if (!aiming) return;
+    aiming = false;
+    const p = toLocal(e);
+    let dx = ball.x - p.x, dy = ball.y - p.y;
+    const len = Math.hypot(dx, dy);
+    if (len < 8) return;
+    const power = Math.min(len, MAX_PULL) / MAX_PULL * MAX_SPEED;
+    ball.vx = dx / len * power; ball.vy = dy / len * power;
+    strokes++; strokesEl.textContent = 'Stroke ' + strokes;
+    hintEl.textContent = 'Rolling…';
+  }
+  canvas.addEventListener('pointerup', release);
+  canvas.addEventListener('pointercancel', () => { aiming = false; });
+
+  // Keyboard fallback: arrows aim, space putts.
+  let kbAngle = -Math.PI / 2, kbPower = 0.55;
+  canvas.tabIndex = 0;
+  canvas.addEventListener('keydown', e => {
+    if (ball.sunk || moving()) return;
+    if (e.key === 'ArrowLeft') kbAngle -= 0.08;
+    else if (e.key === 'ArrowRight') kbAngle += 0.08;
+    else if (e.key === 'ArrowUp') kbPower = Math.min(1, kbPower + 0.05);
+    else if (e.key === 'ArrowDown') kbPower = Math.max(0.1, kbPower - 0.05);
+    else if (e.key === ' ' || e.key === 'Enter') {
+      ball.vx = Math.cos(kbAngle) * kbPower * MAX_SPEED; ball.vy = Math.sin(kbAngle) * kbPower * MAX_SPEED;
+      strokes++; strokesEl.textContent = 'Stroke ' + strokes; aiming = false;
+    } else return;
+    if (e.key !== ' ' && e.key !== 'Enter') {
+      aiming = true;
+      const d = kbPower * MAX_PULL;
+      aim = { x: ball.x - Math.cos(kbAngle) * d, y: ball.y - Math.sin(kbAngle) * d };
+    }
+    e.preventDefault();
+  });
+
+  function resetBall() {
+    Object.assign(ball, { x: START.x, y: START.y, vx: 0, vy: 0, sunk: null, sinkT: 0 });
+    strokes = 0; strokesEl.textContent = 'Stroke 0'; hintEl.textContent = 'Pull back from the ball';
+  }
+  document.getElementById('resetBall').addEventListener('click', resetBall);
+  document.getElementById('puttAgain').addEventListener('click', () => {
+    resetBall(); document.getElementById('teamResult').classList.remove('show');
+    canvas.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+  });
+
+  function step(dt) {
+    if (ball.sunk) { ball.sinkT = Math.min(1, ball.sinkT + dt / 22); return; }
+    const sub = 3;
+    for (let i = 0; i < sub; i++) {
+      ball.x += ball.vx * dt / sub; ball.y += ball.vy * dt / sub;
+      // Rails
+      if (ball.x < BALL_R) { ball.x = BALL_R; ball.vx = Math.abs(ball.vx) * BOUNCE; }
+      if (ball.x > W - BALL_R) { ball.x = W - BALL_R; ball.vx = -Math.abs(ball.vx) * BOUNCE; }
+      if (ball.y < BALL_R) { ball.y = BALL_R; ball.vy = Math.abs(ball.vy) * BOUNCE; }
+      if (ball.y > H - BALL_R) { ball.y = H - BALL_R; ball.vy = -Math.abs(ball.vy) * BOUNCE; }
+      // Pumpkins
+      for (const p of PUMPKINS) {
+        const dx = ball.x - p.x, dy = ball.y - p.y, d = Math.hypot(dx, dy), min = p.r + BALL_R;
+        if (d < min && d > 0) {
+          const nx = dx / d, ny = dy / d;
+          ball.x = p.x + nx * min; ball.y = p.y + ny * min;
+          const dot = ball.vx * nx + ball.vy * ny;
+          if (dot < 0) { ball.vx -= (1 + BOUNCE) * dot * nx; ball.vy -= (1 + BOUNCE) * dot * ny; }
+        }
+      }
+      // Holes: slow enough over the cup drops in; too fast lips out with a nudge.
+      for (const h of HOLES) {
+        const dx = h.x - ball.x, dy = h.y - ball.y, d = Math.hypot(dx, dy);
+        if (d < HOLE_R) {
+          const speed = Math.hypot(ball.vx, ball.vy);
+          if (speed < 6.5 || d < HOLE_R * 0.45 && speed < 9) { sink(h); return; }
+          ball.vx += dx * 0.02; ball.vy += dy * 0.02;
+        }
+      }
+    }
+    const f = Math.pow(FRICTION, dt);
+    ball.vx *= f; ball.vy *= f;
+    if (!moving() && (ball.vx || ball.vy)) {
+      ball.vx = ball.vy = 0;
+      hintEl.textContent = 'So close. Putt again';
+    }
+  }
+
+  function sink(h) {
+    ball.sunk = h; ball.vx = ball.vy = 0; ball.x = h.x; ball.y = h.y;
+    hintEl.textContent = 'In the cup!';
+    store.set('team', h.team.id);
+    showTeam(h.team, strokes);
+  }
+
+  function showTeam(t, n) {
+    document.getElementById('teamName').textContent = t.name;
+    document.getElementById('teamName').style.color = t.color;
+    document.getElementById('teamLine').textContent = t.line + (n ? ` (Sunk in ${n} stroke${n === 1 ? '' : 's'}.)` : '');
+    document.getElementById('teamResult').classList.add('show');
+    updateQuizBar();
+  }
+
+  function drawPumpkin(p) {
+    ctx.save(); ctx.translate(p.x, p.y);
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.beginPath(); ctx.ellipse(3, p.r * 0.75, p.r, p.r * 0.35, 0, 0, Math.PI * 2); ctx.fill();
+    const lobes = 5;
+    for (let i = 0; i < lobes; i++) {
+      const ox = (i - (lobes - 1) / 2) * p.r * 0.32;
+      ctx.fillStyle = i % 2 ? '#d9772f' : '#e58a3a';
+      ctx.beginPath(); ctx.ellipse(ox, 0, p.r * 0.42, p.r * 0.86, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.strokeStyle = 'rgba(120,50,10,0.35)'; ctx.lineWidth = 1.2;
+    for (let i = 1; i < lobes; i++) {
+      const ox = (i - lobes / 2) * p.r * 0.32;
+      ctx.beginPath(); ctx.ellipse(ox, 0, p.r * 0.12, p.r * 0.8, 0, 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.fillStyle = '#4f6b3a';
+    ctx.beginPath(); ctx.roundRect(-2.5, -p.r * 0.95, 5, p.r * 0.32, 2); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawFlag(h) {
+    const t = h.team;
+    ctx.fillStyle = 'rgba(0,0,0,0.28)';
+    ctx.beginPath(); ctx.arc(h.x, h.y, HOLE_R + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(h.x, h.y, HOLE_R, 0, Math.PI * 2); ctx.fillStyle = '#16231a'; ctx.fill();
+    // Pin + pennant
+    ctx.strokeStyle = '#f3eadb'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(h.x, h.y); ctx.lineTo(h.x, h.y - 46); ctx.stroke();
+    ctx.fillStyle = t.color;
+    ctx.beginPath(); ctx.moveTo(h.x + 1, h.y - 46); ctx.lineTo(h.x + 24, h.y - 39); ctx.lineTo(h.x + 1, h.y - 32); ctx.closePath(); ctx.fill();
+    // Label
+    ctx.font = '700 11px Manrope, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    const label = t.name.replace('The ', '').toUpperCase();
+    const tw = ctx.measureText(label).width + 14;
+    ctx.fillStyle = 'rgba(255,250,241,0.92)';
+    ctx.beginPath(); ctx.roundRect(h.x - tw / 2, h.y + HOLE_R + 6, tw, 18, 9); ctx.fill();
+    ctx.fillStyle = t.color; ctx.fillText(label, h.x, h.y + HOLE_R + 19);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // Mown stripes
+    for (let i = 0; i < 8; i++) {
+      ctx.fillStyle = i % 2 ? '#4d7a45' : '#56844d';
+      ctx.fillRect(0, i * H / 8, W, H / 8);
+    }
+    // Tee box
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.beginPath(); ctx.roundRect(START.x - 40, START.y - 26, 80, 52, 14); ctx.fill();
+    // A few fallen leaves on the turf
+    ctx.save();
+    [[40, 470, '#b4532a', .4], [360, 500, '#cf9526', -.6], [350, 200, '#6e2f3d', 1.2], [36, 340, '#cf9526', 2.2], [250, 60, '#b4532a', .9]].forEach(([x, y, c, r]) => {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.fillStyle = c; ctx.globalAlpha = .85;
+      ctx.beginPath(); ctx.ellipse(0, 0, 9, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    });
+    ctx.restore();
+    HOLES.forEach(drawFlag);
+    PUMPKINS.forEach(drawPumpkin);
+
+    // Aim guide
+    if (aiming && !ball.sunk) {
+      const dx = ball.x - aim.x, dy = ball.y - aim.y, len = Math.hypot(dx, dy);
+      if (len > 4) {
+        const k = Math.min(len, MAX_PULL) / MAX_PULL;
+        const ux = dx / len, uy = dy / len;
+        ctx.setLineDash([4, 7]); ctx.lineCap = 'round';
+        ctx.strokeStyle = 'rgba(255,250,241,0.9)'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(ball.x, ball.y); ctx.lineTo(ball.x + ux * (30 + k * 150), ball.y + uy * (30 + k * 150)); ctx.stroke();
+        ctx.setLineDash([]);
+        // Power arc
+        ctx.strokeStyle = k > 0.8 ? '#e0603a' : '#f0b46a'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.arc(ball.x, ball.y, BALL_R + 9, -Math.PI / 2, -Math.PI / 2 + k * Math.PI * 2); ctx.stroke();
+      }
+    }
+
+    // Ball
+    const s = ball.sunk ? 1 - ball.sinkT * 0.6 : 1;
+    if (!ball.sunk || ball.sinkT < 1) {
+      ctx.fillStyle = 'rgba(0,0,0,0.25)';
+      ctx.beginPath(); ctx.ellipse(ball.x + 2, ball.y + 3, BALL_R * s, BALL_R * 0.7 * s, 0, 0, Math.PI * 2); ctx.fill();
+      const g = ctx.createRadialGradient(ball.x - 3, ball.y - 3, 1, ball.x, ball.y, BALL_R * s);
+      g.addColorStop(0, '#ffffff'); g.addColorStop(1, '#dcd6c8');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(ball.x, ball.y, BALL_R * s, 0, Math.PI * 2); ctx.fill();
+    }
+    if (!aiming && !moving() && !ball.sunk && strokes === 0) {
+      // Gentle pulse to invite the first putt
+      const t = (performance.now() / 900) % 1;
+      ctx.strokeStyle = `rgba(255,250,241,${0.7 * (1 - t)})`; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(ball.x, ball.y, BALL_R + 4 + t * 16, 0, Math.PI * 2); ctx.stroke();
+    }
+  }
+
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(3, (now - last) / (1000 / 60));
+    last = now;
+    step(dt); draw();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  const savedTeam = TEAMS.find(t => t.id === store.get('team'));
+  if (savedTeam) showTeam(savedTeam, 0);
+
+  /* ---------------- Categories ---------------- */
+  const icon = p => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const CATS = [
+    { id: 'film',    name: 'Film & TV',        blurb: 'Quotes, sitcoms, award winners', icon: icon('<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M7 6l2-3M13 6l2-3"/>') },
+    { id: 'music',   name: 'Music',            blurb: 'Bands, hits, and instruments',   icon: icon('<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>') },
+    { id: 'geo',     name: 'Geography',        blurb: 'Capitals, rivers, landmarks',    icon: icon('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/>') },
+    { id: 'science', name: 'Science & Nature', blurb: 'Planets, elements, creatures',   icon: icon('<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/>') },
+    { id: 'sports',  name: 'Sports & Golf',    blurb: 'Fairways, majors, and rules',    icon: icon('<path d="M6 21V3l11 4-11 4"/><ellipse cx="12" cy="21" rx="7" ry="1.5"/>') },
+    { id: 'food',    name: 'Food & Travel',    blurb: 'Cuisines, origins, ingredients', icon: icon('<path d="M4 11h16a8 8 0 0 1-16 0zM12 3v4M8 5v2M16 5v2"/>') },
+    { id: 'history', name: 'History',          blurb: 'Dates, firsts, and wonders',     icon: icon('<path d="M4 21h16M5 21V10M19 21V10M9 21V10M15 21V10M3 10l9-6 9 6z"/>') },
+    { id: 'pop',     name: 'Pop Culture',      blurb: 'Toys, trends, and icons',        icon: icon('<path d="M12 3l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L4.8 8.2l5-.7z"/>') },
+  ];
+  let picked = new Set((store.get('cats') || []).filter(id => CATS.some(c => c.id === id)));
+  const catsEl = document.getElementById('cats');
+  catsEl.innerHTML = CATS.map(c => `
+    <button type="button" class="cat" data-id="${c.id}" aria-pressed="${picked.has(c.id)}">
+      <span class="row"><span class="glyph" aria-hidden="true">${c.icon}</span><span class="check" aria-hidden="true">✓</span></span>
+      <b>${c.name}</b><small>${c.blurb}</small>
+    </button>`).join('');
+  catsEl.addEventListener('click', e => {
+    const b = e.target.closest('.cat'); if (!b) return;
+    const id = b.dataset.id;
+    picked.has(id) ? picked.delete(id) : picked.add(id);
+    b.setAttribute('aria-pressed', picked.has(id));
+    store.set('cats', [...picked]);
+    updateProfile();
+    if (quizState === 'intro') renderIntro();
+  });
+  function listNames(names) {
+    if (names.length <= 1) return names.join('');
+    return names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1];
+  }
+  function updateProfile() {
+    const names = CATS.filter(c => picked.has(c.id)).map(c => c.name);
+    const el = document.getElementById('profileLine');
+    if (!names.length) el.textContent = "Pick a category or two and we'll know where you shine.";
+    else if (names.length === CATS.length) el.innerHTML = '<strong>A true all-rounder.</strong> Your team will want you on every question.';
+    else el.innerHTML = `You're the team's go-to for <strong>${listNames(names)}</strong>.`;
+  }
+  updateProfile();
+
+  /* ---------------- Trivia demo ---------------- */
+  const QUESTIONS = [
+    { cat: 'film', q: 'Which film won Best Picture at the Academy Awards in 2020?', a: ['Parasite', '1917', 'Joker', 'Little Women'], c: 0 },
+    { cat: 'film', q: 'What is the name of the coffee shop in "Friends"?', a: ['Central Perk', 'The Daily Grind', 'Monk\'s Café', 'Luke\'s Diner'], c: 0 },
+    { cat: 'film', q: 'In the 1939 film "The Wizard of Oz", what are Dorothy\'s slippers?', a: ['Silver', 'Ruby', 'Glass', 'Emerald'], c: 1 },
+    { cat: 'music', q: 'How many keys does a standard modern piano have?', a: ['76', '61', '88', '92'], c: 2 },
+    { cat: 'music', q: 'Which band released "Bohemian Rhapsody" in 1975?', a: ['The Beatles', 'Queen', 'ABBA', 'Led Zeppelin'], c: 1 },
+    { cat: 'music', q: 'How many lines are there on a standard musical staff?', a: ['Four', 'Five', 'Six', 'Seven'], c: 1 },
+    { cat: 'geo', q: 'What is the capital of Australia?', a: ['Sydney', 'Melbourne', 'Perth', 'Canberra'], c: 3 },
+    { cat: 'geo', q: 'What is the longest river in South America?', a: ['Amazon', 'Paraná', 'Orinoco', 'Magdalena'], c: 0 },
+    { cat: 'geo', q: 'Which U.S. state is nicknamed "The Golden State"?', a: ['Nevada', 'Arizona', 'California', 'Colorado'], c: 2 },
+    { cat: 'science', q: 'What is the chemical symbol for gold?', a: ['Gd', 'Au', 'Ag', 'Go'], c: 1 },
+    { cat: 'science', q: 'How many hearts does an octopus have?', a: ['One', 'Two', 'Three', 'Eight'], c: 2 },
+    { cat: 'science', q: 'Which planet is famous for its prominent ring system?', a: ['Mars', 'Saturn', 'Venus', 'Mercury'], c: 1 },
+    { cat: 'sports', q: 'In golf, what do you call a score of one under par on a hole?', a: ['Bogey', 'Eagle', 'Birdie', 'Albatross'], c: 2 },
+    { cat: 'sports', q: 'How many clubs may a golfer carry in their bag under the rules?', a: ['12', '14', '16', '18'], c: 1 },
+    { cat: 'sports', q: 'The Masters is played every year in which U.S. state?', a: ['Florida', 'California', 'Georgia', 'South Carolina'], c: 2 },
+    { cat: 'food', q: 'Saffron comes from which flower?', a: ['Crocus', 'Tulip', 'Marigold', 'Lavender'], c: 0 },
+    { cat: 'food', q: 'Which Italian city is the home of pizza Margherita?', a: ['Rome', 'Milan', 'Florence', 'Naples'], c: 3 },
+    { cat: 'food', q: 'Which country is the world\'s largest producer of coffee?', a: ['Colombia', 'Vietnam', 'Brazil', 'Ethiopia'], c: 2 },
+    { cat: 'history', q: 'In what year did the Berlin Wall fall?', a: ['1987', '1989', '1991', '1993'], c: 1 },
+    { cat: 'history', q: 'Who was the first person to walk on the Moon?', a: ['Buzz Aldrin', 'Yuri Gagarin', 'Neil Armstrong', 'John Glenn'], c: 2 },
+    { cat: 'history', q: 'Which ancient wonder stood in the harbor of Alexandria?', a: ['The Colossus', 'The Lighthouse', 'The Hanging Gardens', 'The Mausoleum'], c: 1 },
+    { cat: 'pop', q: 'Which toy brick company was founded in Denmark?', a: ['Mega Bloks', 'LEGO', 'K\'NEX', 'Playmobil'], c: 1 },
+    { cat: 'pop', q: 'What color is the "like" heart on Instagram once tapped?', a: ['Blue', 'Red', 'Pink', 'Gold'], c: 1 },
+    { cat: 'pop', q: 'Which video game character is a plumber in red overalls?', a: ['Luigi', 'Wario', 'Mario', 'Toad'], c: 2 },
+  ];
+  const ROUND = 5, TIME = 20;
+  const quizEl = document.getElementById('quiz');
+  let quizState = 'intro', deck = [], qi = 0, score = 0, streak = 0, results = [], tStart = 0, timerId = 0, answered = false;
+
+  const esc = s => s.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+  const catName = id => CATS.find(c => c.id === id).name;
+  function teamLabel() {
+    const t = TEAMS.find(t => t.id === store.get('team'));
+    return t ? `Playing for <span style="color:${t.color}">${t.name}</span>` : 'No team yet';
+  }
+  function updateQuizBar() { const el = document.getElementById('quizTeam'); if (el) el.innerHTML = teamLabel(); }
+  function bar(right) {
+    return `<div class="quiz-bar"><span id="quizTeam">${teamLabel()}</span><span class="pill">${right}</span></div>`;
+  }
+  function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+
+  function renderIntro() {
+    quizState = 'intro';
+    const names = CATS.filter(c => picked.has(c.id)).map(c => c.name);
+    quizEl.innerHTML = bar('Warm-up') + `<div class="quiz-body quiz-center">
+      <h3>Ready when you are</h3>
+      <p>${names.length ? `Five questions drawn from ${esc(listNames(names))}.` : 'Five questions from every category. Pick your strengths above to tailor the round.'} You have ${TIME} seconds for each, and quicker answers score higher.</p>
+      <button class="btn btn-primary" type="button" id="startQuiz">Start the round</button>
+    </div>`;
+    document.getElementById('startQuiz').onclick = startQuiz;
+  }
+
+  function startQuiz() {
+    const pool = QUESTIONS.filter(q => !picked.size || picked.has(q.cat));
+    deck = shuffle(pool.slice());
+    if (deck.length < ROUND) deck = deck.concat(shuffle(QUESTIONS.filter(q => !deck.includes(q))));
+    deck = deck.slice(0, ROUND);
+    qi = 0; score = 0; streak = 0; results = [];
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    quizState = 'question'; answered = false;
+    const q = deck[qi];
+    quizEl.innerHTML = bar(`Question ${qi + 1} of ${ROUND} · ${score.toLocaleString()} pts`) + `<div class="quiz-body">
+      <div class="timer" aria-hidden="true"><i id="timerFill"></i></div>
+      <p class="q-cat">${esc(catName(q.cat))}</p>
+      <p class="q-text" id="qText" tabindex="-1">${esc(q.q)}</p>
+      <div class="answers">${q.a.map((a, i) => `<button class="ans" type="button" data-i="${i}"><span class="key">${'ABCD'[i]}</span>${esc(a)}</button>`).join('')}</div>
+      <div class="feedback" id="feedback"><span id="timeLeft">${TIME}s left</span></div>
+    </div>`;
+    quizEl.querySelectorAll('.ans').forEach(b => b.onclick = () => answer(+b.dataset.i));
+    document.getElementById('qText').focus({ preventScroll: true });
+    tStart = performance.now();
+    cancelAnimationFrame(timerId);
+    const tick = now => {
+      if (answered) return;
+      const left = Math.max(0, TIME - (now - tStart) / 1000);
+      const fill = document.getElementById('timerFill');
+      if (fill) fill.style.transform = `scaleX(${left / TIME})`;
+      const tl = document.getElementById('timeLeft');
+      if (tl) tl.textContent = Math.ceil(left) + 's left';
+      if (left <= 0) return answer(-1);
+      timerId = requestAnimationFrame(tick);
+    };
+    timerId = requestAnimationFrame(tick);
+  }
+
+  function answer(i) {
+    if (answered || quizState !== 'question') return;
+    answered = true; cancelAnimationFrame(timerId);
+    const q = deck[qi];
+    const left = Math.max(0, TIME - (performance.now() - tStart) / 1000);
+    const right = i === q.c;
+    let pts = 0;
+    if (right) { streak++; pts = Math.round(500 + 500 * left / TIME) + (streak > 1 ? 100 : 0); score += pts; }
+    else streak = 0;
+    results.push({ q: q.q, right, pts });
+    quizEl.querySelectorAll('.ans').forEach((b, j) => {
+      b.disabled = true;
+      if (j === q.c) b.classList.add('correct');
+      else if (j === i) b.classList.add('wrong');
+    });
+    const msg = right
+      ? `<span class="good">Correct! +${pts.toLocaleString()}${streak > 1 ? ` · ${streak} in a row` : ''}</span>`
+      : `<span class="bad">${i < 0 ? "Time's up." : 'Not quite.'} It was ${esc(q.a[q.c])}.</span>`;
+    document.getElementById('feedback').innerHTML = msg +
+      `<button class="btn btn-primary" type="button" id="nextQ">${qi + 1 < ROUND ? 'Next question' : 'See your score'}</button>`;
+    const next = document.getElementById('nextQ');
+    next.onclick = () => { qi++; qi < ROUND ? renderQuestion() : renderEnd(); };
+    next.focus({ preventScroll: true });
+  }
+
+  function renderEnd() {
+    quizState = 'end';
+    const correct = results.filter(r => r.right).length;
+    const verdict = correct === ROUND ? 'A clean card. The playlist is yours.'
+      : correct >= 3 ? 'Solid round. Your team will be glad to have you.'
+      : 'Every team needs a closer. Save your best for the Bungalow.';
+    quizEl.innerHTML = bar('Final') + `<div class="quiz-body quiz-center">
+      <p class="q-cat">Your score</p>
+      <div class="bigscore">${score.toLocaleString()}</div>
+      <h3>${correct} of ${ROUND} correct</h3>
+      <p>${verdict}</p>
+      <ul class="recap">${results.map(r => `<li><span>${esc(r.q)}</span><span style="color:${r.right ? 'var(--moss)' : 'var(--rust)'}">${r.right ? '+' + r.pts.toLocaleString() : '0'}</span></li>`).join('')}</ul>
+      <button class="btn btn-primary" type="button" id="again">Play another round</button>
+    </div>`;
+    document.getElementById('again').onclick = startQuiz;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (quizState !== 'question' || answered) return;
+    const n = '1234'.indexOf(e.key);
+    if (n >= 0 && quizEl.contains(document.activeElement)) answer(n);
+  });
+
+  renderIntro();
+})();
+</script>
 </body>
 </html>
