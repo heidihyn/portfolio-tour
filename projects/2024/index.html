@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Heidi's 2024 birthday: minigolf, trivia, and food trucks.">
+<title>2024 · Minigolf, Trivia &amp; Food Trucks · Heidi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Manrope:wght@400;600;700&display=swap">
+<style>
+  /* 2024 · Birthday party. Placeholder page in the portal's theme: a sunny mown fairway,
+     coral pin flag, golf-ball white and sunshine yellow. The full page comes later. */
+  :root {
+    color-scheme: light;
+    --grass: #3f9a4a;
+    --grass-dark: #2f7d3a;
+    --grass-light: #7be06a;
+    --coral: #ff5a4e;
+    --sun: #ffcf3f;
+    --ball: #fbfbf7;
+    --ink: #13311b;
+    --display: "Syncopate", "Arial Black", sans-serif;
+    --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    min-height: 100vh; min-height: 100dvh;
+    display: grid; place-items: center; padding: 32px 16px;
+    font-family: var(--body); color: var(--ink);
+    background:
+      radial-gradient(circle at 50% 108%, var(--sun) 0 9%, transparent 9.2%),
+      repeating-linear-gradient(90deg, var(--grass) 0 64px, var(--grass-dark) 64px 128px);
+  }
+  .card {
+    position: relative; width: min(560px, 100%);
+    padding: 40px 32px 32px; border-radius: 28px;
+    background: var(--ball);
+    background-image: radial-gradient(rgba(19, 49, 27, 0.06) 22%, transparent 24%);
+    background-size: 18px 18px;
+    box-shadow: 0 24px 60px rgba(10, 40, 15, 0.35);
+  }
+  .flag { position: absolute; top: -46px; right: 40px; width: 4px; height: 92px; background: var(--ink); border-radius: 2px; }
+  .flag::after { content: ""; position: absolute; left: 4px; top: 0; border-left: 46px solid var(--coral); border-top: 15px solid transparent; border-bottom: 15px solid transparent; }
+  .eyebrow { font-family: var(--display); font-size: 11px; letter-spacing: 0.32em; color: var(--grass-dark); margin: 0 0 12px; }
+  h1 { font-family: var(--display); font-size: clamp(22px, 5vw, 32px); line-height: 1.2; margin: 0 0 16px; text-wrap: balance; }
+  p { line-height: 1.6; margin: 0 0 20px; color: #3c5a42; }
+  ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 28px; }
+  li { font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: #e9f7e4; color: var(--grass-dark); }
+  a.back { display: inline-block; font-weight: 700; font-size: 14px; color: var(--ball); background: var(--ink); padding: 11px 18px; border-radius: 999px; text-decoration: none; }
+  a.back:hover { background: var(--grass-dark); }
+  a.back:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
+</style>
+</head>
+<body>
+  <main class="card">
+    <span class="flag" aria-hidden="true"></span>
+    <p class="eyebrow">2024 · BIRTHDAY PARTY</p>
+    <h1>Minigolf, Trivia &amp; Food Trucks</h1>
+    <ul><li>Minigolf</li><li>Trivia</li><li>Food trucks</li></ul>
+    <p>The full story of this party is coming soon.</p>
+    <a class="back" href="../../#2024">← Back to the hallway</a>
+  </main>
+</body>
+</html>

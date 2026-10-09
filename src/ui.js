@@ -1,13 +1,12 @@
-// The HTML layer over the 3D scene: speech bubble, year rail, room card, fades, loading screen.
+// The HTML layer over the 3D scene: speech bubble, year rail, fades, loading screen.
 
 const $ = (id) => document.getElementById(id);
 
-export function createUI({ projects, onJump, onExitRoom }) {
+export function createUI({ projects, onJump }) {
   const bubble = $('bubble');
   const bubbleText = $('bubble-text');
   const bubbleActions = $('bubble-actions');
   const fade = $('fade');
-  const roomCard = $('room-card');
   let bubbleKey = null;
   const scrollCue = $('scroll-cue');
   if (window.matchMedia('(pointer: coarse)').matches) $('scroll-cue-text').textContent = 'Swipe up to walk';
@@ -23,8 +22,6 @@ export function createUI({ projects, onJump, onExitRoom }) {
     rail.appendChild(b);
     return b;
   });
-
-  $('room-exit').addEventListener('click', () => onExitRoom());
 
   return {
     /** Show a line from the guide. `key` avoids rebuilding the DOM every frame. */
@@ -75,27 +72,6 @@ export function createUI({ projects, onJump, onExitRoom }) {
     fadeTo(color, opacity) {
       if (color) fade.style.background = color;
       fade.style.opacity = String(opacity);
-    },
-
-    showRoom(p) {
-      roomCard.style.setProperty('--accent', p.accent);
-      $('room-eyebrow').textContent = `${p.year} · ${p.kind}`;
-      $('room-title').textContent = p.title;
-      $('room-tags').replaceChildren(...p.tags.map((t) => {
-        const li = document.createElement('li');
-        li.textContent = t;
-        return li;
-      }));
-      $('room-note').textContent = p.roomNote ?? '';
-      roomCard.hidden = false;
-      rail.hidden = true;
-      scrollCue.hidden = true;
-      $('room-exit').focus({ preventScroll: true });
-    },
-
-    hideRoom() {
-      roomCard.hidden = true;
-      rail.hidden = false;
     },
 
     ready() {

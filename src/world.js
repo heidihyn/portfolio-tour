@@ -63,8 +63,8 @@ export function createWorld({ env }) {
   floor.name = 'floor';
   scene.add(floor);
 
-  // Scale: a colonnade of tall columns far out on both sides, and a few huge slabs beyond it,
-  // all receding into the fog. You walk a straight line, but the space reads as vast.
+  // Scale: a colonnade of tall columns far out on both sides, receding into the fog.
+  // You walk a straight line, but the space reads as vast.
   const rand = mulberry32(7);
   const stone = new THREE.MeshStandardMaterial({ color: 0xe6e7eb, roughness: 0.9 });
   const COLUMN_X = 13;
@@ -85,15 +85,6 @@ export function createWorld({ env }) {
       col.add(base, body, top);
       scene.add(col);
     }
-  }
-  for (let i = 0; i < 10; i++) {
-    const side = i % 2 ? 1 : -1;
-    const w = 4 + rand() * 6;
-    const h = 22 + rand() * 26;
-    const slab = new THREE.Mesh(new THREE.BoxGeometry(w, h, w * (0.6 + rand())), stone);
-    slab.position.set(side * (42 + rand() * 30), h / 2, 6 - i * 14 - rand() * 8);
-    slab.rotation.y = (rand() - 0.5) * 0.6;
-    scene.add(slab);
   }
 
   // Drifting motes of light.

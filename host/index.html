@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Have Heidi host your event.">
+<title>Host Your Event · Heidi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;600;700&display=swap">
+<style>
+  /* The invitation at the end of the hallway. Placeholder page in the portal's theme: an ivory
+     invitation card with a champagne-gold border, a wax seal, and confetti. The full page comes later. */
+  :root {
+    color-scheme: light;
+    --ivory: #f7f1e6;
+    --card: #fffdf8;
+    --gold: #b8913f;
+    --gold-light: #d8b26a;
+    --blush: #e8b4b0;
+    --wax: #9c2f3a;
+    --ink: #2b2f3d;
+    --muted: #6b6455;
+    --serif: "Cormorant Garamond", Georgia, serif;
+    --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    min-height: 100vh; min-height: 100dvh;
+    display: grid; place-items: center; padding: 48px 16px 32px;
+    font-family: var(--body); color: var(--ink);
+    background:
+      radial-gradient(circle at 12% 18%, var(--blush) 0 4px, transparent 5px),
+      radial-gradient(circle at 82% 26%, var(--gold-light) 0 3px, transparent 4px),
+      radial-gradient(circle at 70% 82%, var(--blush) 0 3px, transparent 4px),
+      radial-gradient(circle at 24% 76%, var(--gold-light) 0 4px, transparent 5px),
+      radial-gradient(ellipse at 50% 30%, #fbf3ea, var(--ivory) 60%, #efe3d2);
+  }
+  .invite {
+    position: relative; width: min(540px, 100%); padding: 56px 36px 36px; text-align: center;
+    background: var(--card); border: 1px solid var(--gold-light);
+    outline: 1px solid var(--gold-light); outline-offset: -12px;
+    box-shadow: 0 24px 60px rgba(90, 70, 40, 0.18);
+  }
+  .seal {
+    position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center;
+    background: radial-gradient(circle at 35% 35%, #c04a55, var(--wax) 60%, #7a1f2a);
+    color: var(--gold-light); font-size: 22px; box-shadow: 0 6px 14px rgba(122, 31, 42, 0.35);
+  }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.4em; color: var(--gold); margin: 0 0 14px; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(32px, 7vw, 46px); line-height: 1.1; margin: 0 0 16px; text-wrap: balance; }
+  h1 em { font-weight: 500; color: var(--gold); }
+  p { font-family: var(--serif); font-size: 20px; line-height: 1.5; margin: 0 0 28px; color: var(--muted); text-wrap: pretty; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  a.btn { display: inline-block; font-weight: 700; font-size: 14px; padding: 11px 20px; border-radius: 999px; text-decoration: none; }
+  a.back { color: var(--ink); border: 1px solid var(--gold-light); }
+  a.back:hover { background: var(--ivory); }
+  a.btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+</style>
+</head>
+<body>
+  <main class="invite">
+    <div class="seal" aria-hidden="true">♥</div>
+    <p class="eyebrow">YOU'RE INVITED</p>
+    <h1>Let me host <em>your</em> event</h1>
+    <p>Birthdays, game nights, mysteries, whole other decades. The details on how to book me are coming soon.</p>
+    <div class="actions">
+      <a class="btn back" href="../#host">← Back to the hallway</a>
+    </div>
+  </main>
+</body>
+</html>
