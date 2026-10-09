@@ -305,6 +305,9 @@
   .gallery { display: grid; gap: 12px; min-width: 0; }
   .gallery figure { margin: 0; border-radius: 18px; overflow: hidden; background: var(--card); border: 1px solid var(--line); }
   .gallery img { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 1200 / 684; object-fit: cover; }
+  .course-strip { margin-top: 12px; }
+  @media (min-width: 640px) { .course-strip { grid-template-columns: repeat(3, 1fr); } }
+  .course-strip img { aspect-ratio: 3 / 2; }
   .gallery figcaption { padding: 10px 14px; font-size: 13px; font-weight: 700; color: var(--muted); }
 
   footer { padding: 48px 0 56px; text-align: center; color: var(--muted); font-size: 14px; }
@@ -484,6 +487,7 @@
         </div>
         <div class="gallery" id="galleryGrid"></div>
       </div>
+      <div class="gallery course-strip" id="courseGrid"></div>
     </div>
   </section>
 
@@ -522,11 +526,16 @@
   /* ---------------- Photos ---------------- */
   // Add { src, alt, caption } entries here; the venue section lays them out.
   const PHOTOS = [
-    { src: 'photos/bungalow-outside.jpg', alt: 'The Bungalow tipi from outside, with barrel tables and orange stools under a blue sky', caption: 'The Bungalow' },
-    { src: 'photos/bungalow-lounge.jpg', alt: 'Inside the Bungalow: wicker sofas, a patterned red rug, string lights and a wall-mounted screen', caption: 'Inside, where trivia happens' },
+    { grid: 'galleryGrid', src: 'photos/bungalow-outside.jpg', w: 1200, h: 684, alt: 'The Bungalow tipi from outside, with barrel tables and orange stools under a blue sky', caption: 'The Bungalow' },
+    { grid: 'galleryGrid', src: 'photos/bungalow-lounge.jpg', w: 1200, h: 684, alt: 'Inside the Bungalow: wicker sofas, a patterned red rug, string lights and a wall-mounted screen', caption: 'Inside, where trivia happens' },
+    { grid: 'courseGrid', src: 'photos/course-dragon.jpg', w: 980, h: 653, alt: 'A mini golf hole that runs through the mouth of a giant red and gold dragon', caption: 'The Chinatown dragon hole' },
+    { grid: 'courseGrid', src: 'photos/course-victorian.jpg', w: 1024, h: 683, alt: 'A yellow Victorian house facade on a mini golf hole, under string lights at dusk', caption: 'A Victorian on hole 16' },
+    { grid: 'courseGrid', src: 'photos/food-trucks.jpg', w: 348, h: 348, alt: 'Picnic tables, barrels and shade sails in the food truck park', caption: 'Supper at the food trucks' },
   ];
-  document.getElementById('galleryGrid').innerHTML = PHOTOS.map(p =>
-    `<figure><img src="${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy" width="1200" height="684"><figcaption>${esc(p.caption)}</figcaption></figure>`).join('');
+  for (const p of PHOTOS) {
+    document.getElementById(p.grid).insertAdjacentHTML('beforeend',
+      `<figure><img src="${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy" width="${p.w}" height="${p.h}"><figcaption>${esc(p.caption)}</figcaption></figure>`);
+  }
 
   /* ---------------- Leaves ---------------- */
   const leafColors = ['#b4532a', '#cf9526', '#6e2f3d', '#d77a3a', '#8a5a33'];
