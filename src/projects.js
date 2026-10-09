@@ -65,7 +65,7 @@ export const PROJECTS = [
     title: 'Have Heidi host your event',
     tags: ['Your event'],
     accent: '#d8b26a',
-    guideLine: "This last door is for you. Let me take you and your guests through a curated experience of your own, the kind of creative, immersive world they never knew could exist.",
+    guideLine: "This last door is for you. Let me take you and your guests through a curated experience of your own.",
     page: 'host/',
     end: true,
     module: hostInvite,
