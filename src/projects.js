@@ -11,56 +11,56 @@ import * as hostInvite from './portals/host-invite.js';
 //   buildPortal() -> { group, focus, hitTargets, centerY, update(t, dt) }
 // and a standalone page for it (see projects/2024/index.html), then add an entry below with
 // `page` pointing at that page (or a full URL for a project hosted elsewhere, like 2026). Stepping
-// through the portal opens the page. Leave out `page` (like 2027) for a portal you can't enter yet.
+// through the portal opens the page. Leave out `page` (like the next chapter) for a portal you can't enter yet.
 
 export const PROJECTS = [
   {
     id: '2024',
-    year: '2024',
-    kind: 'Birthday party',
+    name: 'Golf',
+    kind: 'Team day',
     title: 'Minigolf, Trivia & Food Trucks',
     tags: ['Minigolf', 'Trivia', 'Food trucks'],
     accent: '#7be06a',
-    guideLine: "On your left is my 2024 birthday: minigolf, trivia, and food trucks. Want to play a round?",
+    guideLine: "On your left is the Fall Fairway Classic: minigolf, trivia, and food trucks. Want to play a round?",
     page: 'projects/2024/',
     module: minigolf,
   },
   {
     id: '2025',
-    year: '2025',
+    name: 'Speakeasy',
     kind: 'Experience',
     title: '1920s Mafia Speakeasy',
     tags: ['1920s', 'Mafia', 'Speakeasy'],
     accent: '#f3b45a',
-    guideLine: "Over here is 2025. We went back to the 1920s for a mafia night in a speakeasy. Know the password?",
+    guideLine: "Over here we went back to the 1920s for a mafia night in a speakeasy. Know the password?",
     page: 'projects/2025/',
     module: speakeasy,
   },
   {
     id: '2026',
-    year: '2026',
+    name: 'Mystery',
     kind: 'Immersive game',
     title: 'AI Murder Mystery & Dance Floor',
     tags: ['AI murder mystery', 'Hacker game', 'Dance floor'],
     accent: '#ff4fb4',
-    guideLine: "And this is 2026: an AI murder mystery, a hacking game, and a dance floor. Someone in there is lying.",
+    guideLine: "And this is an AI murder mystery, with a hacking game and a dance floor. Someone in there is lying.",
     page: 'https://heidihyn.github.io/heartware-demo/',
     module: mystery,
   },
   {
     id: '2027',
-    year: '2027',
+    name: 'Next',
     kind: 'Next chapter',
     title: 'Coming soon',
     tags: [],
     accent: '#8f97bd',
-    guideLine: "That one hasn't happened yet. You'll have to come back next year.",
+    guideLine: "That one hasn't happened yet. You'll have to come back and see.",
     locked: true,
     module: nextChapter,
   },
   {
     id: 'host',
-    year: 'Host',
+    name: 'Host',
     kind: 'Invitation',
     title: 'Have Heidi host your event',
     tags: ['Your event'],

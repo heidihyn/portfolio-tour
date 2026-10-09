@@ -118,7 +118,7 @@ export function buildPortal() {
   }));
   group.add(bubbles);
 
-  const label = makeLabel('2025', { sub: '1920S MAFIA · SPEAKEASY', color: '#8a5418', subColor: '#8c6a45' });
+  const label = makeLabel('SPEAKEASY', { sub: '1920S MAFIA NIGHT', color: '#8a5418', subColor: '#8c6a45' });
   label.position.set(0, top + 1.75, 0);
   group.add(label);
 

@@ -67,7 +67,7 @@ function scriptTexture(windowPx) {
   return { tex, height: h };
 }
 
-/** The title strip along the top of the glass: the year on the left, the caption on the right. */
+/** The title strip along the top of the glass: the theme on the left, the caption on the right. */
 function headerTexture(title, sub, aspect) {
   const c = document.createElement('canvas');
   c.width = 2048; c.height = Math.round(2048 / aspect);

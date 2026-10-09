@@ -7,7 +7,7 @@ import { makeLabel } from '../lib/text.js';
 const R = 1.5;
 const CY = 1.95;
 
-export function buildPortal({ year = '2027' } = {}) {
+export function buildPortal() {
   const group = new THREE.Group();
   const focus = new THREE.Group();
   focus.position.y = CY;
@@ -31,7 +31,7 @@ export function buildPortal({ year = '2027' } = {}) {
   );
   focus.add(ring);
 
-  const label = makeLabel(year, { sub: 'NEXT CHAPTER', color: '#a3a6b2', subColor: '#b3b6c0' });
+  const label = makeLabel('NEXT CHAPTER', { sub: 'COMING SOON', color: '#a3a6b2', subColor: '#b3b6c0' });
   label.position.set(0, CY + R + 0.75, 0);
   group.add(label);
 

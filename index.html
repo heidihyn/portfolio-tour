@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
-  /* Single light look, matching the pale hallway. Layout: a full-bleed WebGL hallway with a thin HUD layer on top (speech bubble, year rail). */
+  /* Single light look, matching the pale hallway. Layout: a full-bleed WebGL hallway with a thin HUD layer on top (speech bubble, project rail). */
   :root {
     color-scheme: light;
     --void: #e4e5e8;
@@ -122,8 +122,11 @@
     .rail button { padding: 6px 10px; }
   }
   @media (max-width: 440px) {
-    /* Five stops don't fit with captions on a phone; the years alone do. */
+    /* Five stops don't fit with captions on a phone; the names alone do. */
     .rail button small { display: none; }
+    .rail { gap: 0; padding: 4px; }
+    .rail button { padding: 6px 6px; }
+    .rail button b { font-size: 10px; letter-spacing: 0.02em; }
   }
   @media (prefers-reduced-motion: reduce) {
     .loading .mark, .scroll-cue .wheel { animation: none; }
