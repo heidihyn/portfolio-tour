@@ -296,11 +296,16 @@
   .tip h3 { margin: 4px 0 6px; font-size: 17px; color: var(--forest); }
   .tip p { margin: 0; font-size: 15px; color: var(--muted); }
 
-  /* ---------- Gallery (shown once photos are added) ---------- */
-  .gallery { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
-  @media (min-width: 900px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
-  .gallery figure { margin: 0; border-radius: 18px; overflow: hidden; background: var(--paper-2); }
-  .gallery img { display: block; width: 100%; max-width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+  /* ---------- Venue + photos ---------- */
+  .venue { display: grid; gap: 20px; align-items: start; }
+  @media (min-width: 900px) { .venue { grid-template-columns: 1fr 1.1fr; } }
+  .venue-facts { display: grid; gap: 12px; min-width: 0; }
+  @media (min-width: 640px) and (max-width: 899px) { .venue-facts { grid-template-columns: 1fr 1fr; } }
+  .venue-facts .num { font-style: normal; font-family: var(--body); font-size: 11px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--rust); }
+  .gallery { display: grid; gap: 12px; min-width: 0; }
+  .gallery figure { margin: 0; border-radius: 18px; overflow: hidden; background: var(--card); border: 1px solid var(--line); }
+  .gallery img { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 1200 / 684; object-fit: cover; }
+  .gallery figcaption { padding: 10px 14px; font-size: 13px; font-weight: 700; color: var(--muted); }
 
   footer { padding: 48px 0 56px; text-align: center; color: var(--muted); font-size: 14px; }
   footer p { margin: 0 0 10px; }
@@ -323,7 +328,7 @@
       <div>
         <p class="eyebrow"><span>Larkspur &amp; Co. team offsite</span><span>Thursday, October 23</span></p>
         <h1>The Fall Fairway <em>Classic</em></h1>
-        <p class="lede">An afternoon of mini golf, a food-truck supper, and a team trivia showdown for everyone at Larkspur &amp; Co.</p>
+        <p class="lede">An afternoon of mini golf at Stagecoach Greens, a food-truck supper, and a team trivia showdown for everyone at Larkspur &amp; Co.</p>
         <div class="cta-row">
           <a class="btn btn-primary" href="#play">Check in and putt for your team</a>
           <a class="btn btn-ghost" href="#schedule">See the schedule</a>
@@ -334,7 +339,7 @@
         <p class="sub">Everything you need, at a glance.</p>
         <dl>
           <dt>When</dt><dd>Thu, Oct 23 · 3:30 to 7:15pm</dd>
-          <dt>Where</dt><dd>Maple Hollow Greens</dd>
+          <dt>Where</dt><dd><a href="https://www.stagecoachgreens.com/cms/" target="_blank" rel="noopener">Stagecoach Greens</a>, Mission Bay, SF</dd>
           <dt>Dress</dt><dd>Smart casual, comfortable shoes</dd>
           <dt>Teams</dt><dd>Four teams of four, drawn by putt</dd>
           <dt>Prize</dt><dd>Winning team sets the playlist</dd>
@@ -454,11 +459,31 @@
       <ol class="timeline">
         <li><span class="hole">HOLE 1</span><div class="time">3:30pm</div><h3>Check-in &amp; team draw</h3><p>Check in by name and putt for your trivia team.</p></li>
         <li><span class="hole">HOLE 2</span><div class="time">3:45 &amp; 4:00pm</div><h3>Tee off</h3><p>Two reserved tee times. A round runs 45 to 60 minutes.</p></li>
-        <li><span class="hole">HOLE 3</span><div class="time">4:45 to 5:45pm</div><h3>Food trucks</h3><p>Supper from the trucks on site, with refreshments.</p></li>
-        <li><span class="hole">HOLE 4</span><div class="time">5:30pm</div><h3>The Bungalow opens</h3><p>Our reserved home base for the rest of the afternoon.</p></li>
+        <li><span class="hole">HOLE 3</span><div class="time">4:45 to 5:45pm</div><h3>Food trucks &amp; the Watering Hole</h3><p>Supper from the Spark Social food trucks next door, and drinks from the course bar.</p></li>
+        <li><span class="hole">HOLE 4</span><div class="time">5:30pm</div><h3>The Bungalow opens</h3><p>Our reserved tipi lounge for the rest of the afternoon.</p></li>
         <li><span class="hole">HOLE 5</span><div class="time">5:45 to 6:30pm</div><h3>Team trivia</h3><p>Four teams, one leaderboard.</p></li>
         <li><span class="hole">HOLE 6</span><div class="time">6:30 to 7:15pm</div><h3>Awards &amp; social</h3><p>The winning team picks the playlist to close the day.</p></li>
       </ol>
+    </div>
+  </section>
+
+  <!-- ======================= VENUE ======================= -->
+  <section class="band" id="venue">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">The venue</p>
+        <h2 class="title">Stagecoach Greens <em>&amp; the Bungalow</em></h2>
+        <p>An outdoor mini golf course in Mission Bay, San Francisco, at 1379 4th Street.</p>
+      </div>
+      <div class="venue">
+        <div class="venue-facts">
+          <article class="tip"><span class="num">The course</span><h3>18 holes of Bay Area history</h3><p>Each hole plays on the region's booms and busts, from the Gold Rush trail and a Barbary Coast saloon to the skyline rivalry of the Transamerica Pyramid and Salesforce Tower.</p></article>
+          <article class="tip"><span class="num">The bar</span><h3>The Watering Hole</h3><p>The bar on the course, serving cocktails and drinks to carry between holes or into supper.</p></article>
+          <article class="tip"><span class="num">Supper</span><h3>Spark Social food trucks</h3><p>A food truck park right next to the course, with a rotating lineup of trucks to choose from.</p></article>
+          <article class="tip"><span class="num">Home base</span><h3>The Bungalow</h3><p>A canvas tipi lounge with sofas, string lights and a big screen, reserved for us from 5:30pm. Trivia runs here.</p></article>
+        </div>
+        <div class="gallery" id="galleryGrid"></div>
+      </div>
     </div>
   </section>
 
@@ -473,23 +498,13 @@
         <article class="tip"><span class="num">i.</span><h3>Tee times are firm</h3><p>The course and the Bungalow are reserved for us, and tee times are not approximate. Please arrive by 3:30pm to check in.</p></article>
         <article class="tip"><span class="num">ii.</span><h3>Check in ahead of time</h3><p>Draw your team and pick your strengths on this page before the day, so you can head straight to the first tee.</p></article>
         <article class="tip"><span class="num">iii.</span><h3>Teams mix departments</h3><p>Your putt decides your team, so expect to play alongside people you don't usually work with.</p></article>
-        <article class="tip"><span class="num">iv.</span><h3>Save room for supper</h3><p>The food trucks run from 4:45pm to 5:45pm, right after your round.</p></article>
-        <article class="tip"><span class="num">v.</span><h3>Find the Bungalow</h3><p>It's ours from 5:30pm, and trivia starts there at 5:45pm.</p></article>
+        <article class="tip"><span class="num">iv.</span><h3>Save room for supper</h3><p>From 4:45pm to 5:45pm, pick up dinner at the Spark Social food trucks next door and a drink at the Watering Hole, the bar on the course.</p></article>
+        <article class="tip"><span class="num">v.</span><h3>Find the Bungalow</h3><p>It's the big canvas tipi with lounge seating and a screen. It's ours from 5:30pm, and trivia starts there at 5:45pm.</p></article>
         <article class="tip"><span class="num">vi.</span><h3>Dress for a course</h3><p>Smart casual is the guide. You'll be on your feet for a round, so wear comfortable shoes.</p></article>
       </div>
     </div>
   </section>
 
-  <!-- ======================= GALLERY ======================= -->
-  <section class="band" id="gallery" hidden>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="kicker">From a past event</p>
-        <h2 class="title">On the <em>green</em></h2>
-      </div>
-      <div class="gallery" id="galleryGrid"></div>
-    </div>
-  </section>
 </main>
 
 <footer class="wrap">
@@ -505,13 +520,13 @@
   const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 
   /* ---------------- Photos ---------------- */
-  // Add { src, alt } entries to show the gallery section.
-  const PHOTOS = [];
-  if (PHOTOS.length) {
-    document.getElementById('galleryGrid').innerHTML = PHOTOS.map(p =>
-      `<figure><img src="${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy"></figure>`).join('');
-    document.getElementById('gallery').hidden = false;
-  }
+  // Add { src, alt, caption } entries here; the venue section lays them out.
+  const PHOTOS = [
+    { src: 'photos/bungalow-outside.jpg', alt: 'The Bungalow tipi from outside, with barrel tables and orange stools under a blue sky', caption: 'The Bungalow' },
+    { src: 'photos/bungalow-lounge.jpg', alt: 'Inside the Bungalow: wicker sofas, a patterned red rug, string lights and a wall-mounted screen', caption: 'Inside, where trivia happens' },
+  ];
+  document.getElementById('galleryGrid').innerHTML = PHOTOS.map(p =>
+    `<figure><img src="${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy" width="1200" height="684"><figcaption>${esc(p.caption)}</figcaption></figure>`).join('');
 
   /* ---------------- Leaves ---------------- */
   const leafColors = ['#b4532a', '#cf9526', '#6e2f3d', '#d77a3a', '#8a5a33'];
