@@ -2,7 +2,7 @@
 
 const $ = (id) => document.getElementById(id);
 
-export function createUI({ projects, onJump }) {
+export function createUI({ projects, onJump, onHome }) {
   const bubble = $('bubble');
   const bubbleText = $('bubble-text');
   const bubbleActions = $('bubble-actions');
@@ -13,6 +13,13 @@ export function createUI({ projects, onJump }) {
 
   // Project rail.
   const rail = $('rail');
+  // First stop: back to the start, where Heidi's greeting is.
+  const home = document.createElement('button');
+  home.type = 'button';
+  home.innerHTML = '<b>Hi</b><small>Intro</small>';
+  home.setAttribute('aria-label', "Walk back to the start and hear Heidi's greeting again");
+  home.addEventListener('click', () => onHome());
+  rail.appendChild(home);
   const railButtons = projects.map((p, i) => {
     const b = document.createElement('button');
     b.type = 'button';
@@ -62,11 +69,12 @@ export function createUI({ projects, onJump }) {
     },
 
     setActive(i) {
+      home.classList.toggle('active', i === 'home');
       railButtons.forEach((b, k) => b.classList.toggle('active', k === i));
     },
 
     setRailEnabled(on) {
-      railButtons.forEach((b) => { b.disabled = !on; });
+      [home, ...railButtons].forEach((b) => { b.disabled = !on; });
     },
 
     fadeTo(color, opacity) {

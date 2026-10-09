@@ -128,6 +128,7 @@ if (new URLSearchParams(location.search).has('debug')) window.__tour = { THREE, 
 const ui = createUI({
   projects: PROJECTS,
   onJump: (i) => jumpTo(i),
+  onHome: () => goHome(),
 });
 
 // ---------------------------------------------------------------------------
@@ -160,6 +161,12 @@ function walkTo(z) {
   if (state.mode === 'intro') startTour();
   if (state.mode !== 'tour') return;
   state.targetZ = THREE.MathUtils.clamp(z, Z_MIN, START_Z);
+}
+
+// Walk back to the start, where Heidi greets you again.
+function goHome() {
+  if (state.mode !== 'tour') return;
+  state.targetZ = START_Z;
 }
 
 function jumpTo(i) {
@@ -272,8 +279,8 @@ canvas.addEventListener('pointermove', (e) => {
         state.lookYaw += dx * 0.0045;
         if (e.pointerType === 'touch') {
           // Touch screens have no scroll wheel: swiping up walks forward, like scrolling a page.
-          if (state.mode === 'intro') startTour();
-          state.targetZ = THREE.MathUtils.clamp(state.targetZ + dy * 0.03, Z_MIN, START_Z);
+          if (state.mode === 'intro' && dy < 0) startTour();
+          if (state.mode === 'tour') state.targetZ = THREE.MathUtils.clamp(state.targetZ + dy * 0.03, Z_MIN, START_Z);
         } else {
           state.lookPitch = THREE.MathUtils.clamp(state.lookPitch + dy * 0.003, -0.55, 0.5);
         }
@@ -308,7 +315,7 @@ canvas.addEventListener('pointerup', (e) => {
 canvas.addEventListener('pointercancel', () => { state.dragging = false; down = null; });
 
 window.addEventListener('wheel', (e) => {
-  if (state.mode === 'intro') startTour();
+  if (state.mode === 'intro' && e.deltaY > 0) startTour();
   if (state.mode === 'tour') state.targetZ = THREE.MathUtils.clamp(state.targetZ - e.deltaY * 0.01, Z_MIN, START_Z);
 }, { passive: true });
 
@@ -319,7 +326,7 @@ window.addEventListener('keydown', (e) => {
     state.keys.add(k);
     e.preventDefault();
   } else if (['w', 's', 'arrowup', 'arrowdown'].includes(k)) {
-    if (state.mode === 'intro') startTour();
+    if (state.mode === 'intro' && (k === 'w' || k === 'arrowup')) startTour();
     state.keys.add(k);
     e.preventDefault();
   } else if ((k === 'enter' || k === ' ') && state.mode === 'tour') {
@@ -390,6 +397,12 @@ function updateHallway(dt, t) {
   camera.position.set(0, EYE + bobY, state.camZ);
   camera.rotation.set(state.pitch, state.yaw, 0);
 
+  // Back at the start (scrolled all the way back, or the Hi button): Heidi greets you again.
+  if (state.mode === 'tour' && state.targetZ >= START_Z - 0.05 && state.camZ > START_Z - 0.4) {
+    state.mode = 'intro';
+    state.announced = -1;
+  }
+
   // Heidi: waves in the intro, then walks ahead and turns to present each portal.
   const atStation = st && near.weight > 0.55 && !moving && state.mode === 'tour';
   let guideTarget;
@@ -431,7 +444,7 @@ function updateHallway(dt, t) {
   } else {
     ui.say('quiet', null);
   }
-  ui.setActive(st && near.weight > 0.3 ? near.index : -1);
+  ui.setActive(state.mode === 'intro' ? 'home' : st && near.weight > 0.3 ? near.index : -1);
   ui.showScrollCue(state.walked < 6);
 }
 

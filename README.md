@@ -17,7 +17,7 @@ Each page is a standalone HTML file (no shared code with the hallway) with a pla
 - Scroll to walk (swipe up on a phone). W / S also work.
 - Drag to look around, or press A / D or the left and right arrows.
 - Click a portal (or "Step inside") to open its page.
-- The bar at the bottom walks you to any portal. `#2025` in the URL starts in front of that portal.
+- The bar at the bottom walks you to any portal. "Hi" (or scrolling all the way back) returns to the start, where Heidi greets you again. `#2025` in the URL starts in front of that portal.
 
 ## Live site
 
