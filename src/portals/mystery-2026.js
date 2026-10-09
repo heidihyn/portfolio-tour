@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import { surfaceMaterial, glowMaterial } from '../lib/shader.js';
 import { makeLabel } from '../lib/text.js';
+import { buildTeleprompter } from './teleprompter-2026.js';
 
 // 2026 · AI murder mystery / hacker immersive game + dance floor.
-// Portal: a neon hexagon with falling code and a red pulse scan, a wireframe "AI core" overhead,
-// and a light-up dance floor in front.
+// Portal: a neon hexagon with falling code and a red pulse scan, a news-desk teleprompter overhead
+// with a wireframe "AI core" perched on it, and a light-up dance floor in front.
 
 const R = 1.6;
 const CY = 2.0;
@@ -106,8 +107,13 @@ export function buildPortal() {
   const hex2 = new THREE.Mesh(new THREE.TorusGeometry(R + 0.36, 0.022, 6, 6), glowMaterial(CYAN, 2));
   focus.add(hex2);
 
-  const core = buildCore(0.8);
-  core.position.set(0, CY + R + 1.0, 0);
+  const prompter = buildTeleprompter();
+  const PROMPTER_Y = CY + R + 0.5 + prompter.height / 2;
+  prompter.group.position.set(0, PROMPTER_Y, 0);
+  group.add(prompter.group);
+
+  const core = buildCore(0.55);
+  core.position.set(2.75, PROMPTER_Y + prompter.height / 2 + 0.1, 0);
   group.add(core);
 
   const floor = buildDanceFloor(6, 5, 0.62);
@@ -115,13 +121,14 @@ export function buildPortal() {
   group.add(floor);
 
   const label = makeLabel('2026', { sub: 'AI MURDER MYSTERY · HACKER GAME · DANCE FLOOR', color: '#c0187a', subColor: '#11808a' });
-  label.position.set(0, CY + R + 2.2, 0);
+  label.position.set(0, PROMPTER_Y + prompter.height / 2 + 0.45, 0);
   group.add(label);
 
   function update(t) {
     hex2.rotation.z = t * 0.25;
     hex.position.x = Math.random() < 0.02 ? (Math.random() - 0.5) * 0.06 : 0;
     core.userData.update(t);
+    prompter.update(t);
     floor.userData.update(t);
   }
 

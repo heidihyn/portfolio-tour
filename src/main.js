@@ -67,11 +67,12 @@ const stations = PROJECTS.map((project, i) => {
   const portal = project.module.buildPortal({ year: project.year });
   // Clicks land on a generous invisible box around the whole portal (frame included, either side),
   // not just its inner surface, so a click anywhere on the portal counts. Measured before the
-  // group is placed, so the box sits in the portal's own frame. Labels and floor decor don't count.
+  // group is placed, so the box sits in the portal's own frame. Labels, floor decor and parts
+  // marked noHit (like the 2026 teleprompter) don't count.
   const box = new THREE.Box3();
   portal.group.updateMatrixWorld(true);
   portal.group.traverse((o) => {
-    if (!o.isMesh || o.isInstancedMesh) return;
+    if (!o.isMesh || o.isInstancedMesh || o.userData.noHit) return;
     const b = new THREE.Box3().setFromObject(o);
     if (b.max.y > 0.4) box.union(b);
   });
