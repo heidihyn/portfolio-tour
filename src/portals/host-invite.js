@@ -134,7 +134,10 @@ export function buildPortal() {
   const one = new THREE.Vector3(1, 1, 1);
   const v = new THREE.Vector3();
 
-  const label = makeLabel('HOST', { sub: 'YOUR EVENT, BY HEIDI', color: '#2b2f3d', subColor: '#8a6a3a' });
+  const label = makeLabel('HOST', {
+    sub: 'YOUR EVENT, BY HEIDI', color: '#f7f1e6', subColor: '#e3c588',
+    plate: { fill: 'rgba(34, 31, 46, 0.92)', stroke: '#d8b26a' },
+  });
   label.position.set(0, 0.2 + H + 1.0, 0);
   group.add(label);
 

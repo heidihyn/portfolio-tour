@@ -38,12 +38,11 @@ python3 -m http.server 8000
 index.html              page shell, HUD styles, import map
 src/main.js             renderer, camera, walking, look-around, stepping through portals
 src/world.js            the hallway (floor, fog, sky, pillars) and contact shadows
-src/guide.js            loads Heidi's avatar; idle and walk clips, waving and pointing
+src/guide.js            Heidi: her figure and her movements
 src/ui.js               speech bubble, year bar, fades
 src/projects.js         the tour order, Heidi's lines, and each portal's page
 src/portals/*.js        one file per portal: buildPortal()
 src/lib/                shader and text helpers
-assets/heidi.glb        Heidi's avatar (rigged, with idle and walk clips)
 projects/<year>/        one standalone page per project
 host/                   the "host your event" page
 ```
@@ -56,6 +55,6 @@ host/                   the "host your event" page
 
 ## Heidi's avatar
 
-`assets/heidi.glb` is a rigged human built from the [MakeHuman](http://www.makehumancommunity.org/) CC0 system assets (body, face, long straight hair, blouse, skirt and shoes), configured and exported with [CharacterCreator](https://github.com/kblood/CharacterCreator), whose exported files are CC0 as well. Its idle and walk clips come from the same export. On top of that we styled it: slim and petite, black hair, navy top, a navy skirt pulled in from an A-line to a column, an even skin tone, and bare ankles instead of socks. Everything in the file is CC0 (public domain), so no credit is required; this note is here as thanks.
+Heidi is drawn entirely in code (`src/guide.js`): a simple, stylized figure built from smooth shapes, slim and petite, with long straight black hair, a navy V-neck sweater, a navy maxi skirt and black flats. Her movement is deliberately small and soft: short steps under the skirt, a gentle hip sway, hands resting together when she stands, a light wave and an open presenting gesture.
 
-It deliberately isn't a model of Mirage from *The Incredibles*: those characters are Disney/Pixar's copyrighted designs, and models ripped from the films or games can't be used on a public site.
+She isn't a model of Mirage from *The Incredibles*: those characters are Disney/Pixar's copyrighted designs, and models ripped from the films or games can't be used on a public site.

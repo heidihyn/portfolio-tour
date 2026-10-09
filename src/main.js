@@ -48,7 +48,7 @@ try {
 } catch { /* fall back to system fonts on the labels */ }
 
 const world = createWorld({ env });
-const guide = await createGuide();
+const guide = createGuide();
 guide.group.position.set(0, 0, GUIDE_START_Z);
 world.scene.add(guide.group);
 
@@ -422,7 +422,7 @@ function updateHallway(dt, t) {
     ui.say('intro', "Hi, I'm Heidi. Welcome to my corner of the universe. Scroll to take a tour with me.");
   } else if (atStation) {
     const p = st.project;
-    const actions = p.page ? [{ label: p.end ? 'Plan your event' : 'Step inside', primary: true, onClick: () => enterStation(near.index) }] : [];
+    const actions = p.page ? [{ label: p.end ? 'Step through' : 'Step inside', primary: true, onClick: () => enterStation(near.index) }] : [];
     ui.say(`station-${near.index}`, p.guideLine, actions);
     state.announced = near.index;
   } else if (state.announced < 0 && !moving) {

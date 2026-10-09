@@ -16,20 +16,28 @@ function fitFont(ctx, text, weight, size, family, maxWidth) {
 }
 
 /** A floating year label (big line + small caption) that always faces the viewer. */
-export function makeLabel(text, { sub = '', color = '#2b2f3d', subColor = '#6c7184', glow = null, height = 0.85, family = FONTS.display } = {}) {
+export function makeLabel(text, { sub = '', color = '#2b2f3d', subColor = '#6c7184', glow = null, height = 0.85, family = FONTS.display, plate = null } = {}) {
   const c = document.createElement('canvas');
   c.width = 1024; c.height = 256;
   const ctx = c.getContext('2d');
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  fitFont(ctx, text, 700, 118, family, 980);
+  // Optional backing card, so the label reads against the pale fog and sky behind it.
+  if (plate) {
+    ctx.beginPath();
+    ctx.roundRect(150, 14, 724, 228, 40);
+    ctx.fillStyle = plate.fill;
+    ctx.fill();
+    if (plate.stroke) { ctx.lineWidth = 6; ctx.strokeStyle = plate.stroke; ctx.stroke(); }
+  }
+  fitFont(ctx, text, 700, 118, family, plate ? 640 : 980);
   if (glow) { ctx.shadowColor = glow; ctx.shadowBlur = 28; }
   ctx.fillStyle = color;
   ctx.fillText(text, 512, sub ? 98 : 128);
   if (sub) {
     ctx.shadowBlur = 0;
     if ('letterSpacing' in ctx) ctx.letterSpacing = '5px';
-    fitFont(ctx, sub, 600, 34, FONTS.body, 980);
+    fitFont(ctx, sub, 600, 34, FONTS.body, plate ? 640 : 980);
     ctx.fillStyle = subColor;
     ctx.fillText(sub, 512, 204);
   }
