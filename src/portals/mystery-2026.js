@@ -109,7 +109,7 @@ export function buildPortal() {
   const core = buildCore(0.45);
   core.position.set(0, CY + R + 0.65, 0);
   // The year and caption ride along the top of the teleprompter glass, in place of a floating label.
-  const prompter = buildTeleprompter({ title: '2026', sub: 'AI MURDER MYSTERY · HACKER GAME · DANCE FLOOR' });
+  const prompter = buildTeleprompter({ title: 'MURDER MYSTERY', sub: 'HACKER GAME · DANCE FLOOR' });
   const PROMPTER_Y = core.position.y + prompter.gap + prompter.height / 2;
   prompter.group.position.set(0, PROMPTER_Y, 0);
   group.add(prompter.group);

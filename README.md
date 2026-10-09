@@ -1,10 +1,10 @@
 # Heidi's Portfolio Tour
 
-A walkable 3D hallway. Heidi greets you, walks you down a pale, foggy corridor lined with pillars, and points out a portal for each year's project. Click a portal to step through to that project's own page. At the end of the hallway, an invitation portal leads to a page about having Heidi host your event.
+A walkable 3D hallway. Heidi greets you, walks you down a pale, foggy corridor lined with pillars, and points out a portal for each experience. Click a portal to step through to that project's own page. At the end of the hallway, an invitation portal leads to a page about having Heidi host your event.
 
 | Portal | Where | Theme | Page |
 | --- | --- | --- | --- |
-| 2024 | Left | Birthday party: minigolf, trivia, food trucks | `projects/2024/` |
+| 2024 | Left | Fall Fairway Classic: minigolf, trivia, food trucks | `projects/2024/` |
 | 2025 | Right | 1920s mafia speakeasy | `projects/2025/` |
 | 2026 | Left | AI murder mystery, hacker game, dance floor | `projects/2026/` |
 | 2027 | Right | Next chapter (not enterable yet) | none |
@@ -17,7 +17,7 @@ Each page is a standalone HTML file (no shared code with the hallway) with a pla
 - Scroll to walk (swipe up on a phone). W / S also work.
 - Drag to look around, or press A / D or the left and right arrows.
 - Click a portal (or "Step inside") to open its page.
-- The year bar at the bottom walks you to any portal. `#2025` in the URL starts in front of that portal.
+- The bar at the bottom walks you to any portal. `#2025` in the URL starts in front of that portal.
 
 ## Live site
 

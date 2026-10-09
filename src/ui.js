@@ -1,4 +1,4 @@
-// The HTML layer over the 3D scene: speech bubble, year rail, fades, loading screen.
+// The HTML layer over the 3D scene: speech bubble, project rail, fades, loading screen.
 
 const $ = (id) => document.getElementById(id);
 
@@ -11,13 +11,13 @@ export function createUI({ projects, onJump }) {
   const scrollCue = $('scroll-cue');
   if (window.matchMedia('(pointer: coarse)').matches) $('scroll-cue-text').textContent = 'Swipe up to walk';
 
-  // Year rail.
+  // Project rail.
   const rail = $('rail');
   const railButtons = projects.map((p, i) => {
     const b = document.createElement('button');
     b.type = 'button';
-    b.innerHTML = `<b>${p.year}</b><small>${p.locked ? 'Soon' : p.tags[0] ?? p.kind}</small>`;
-    b.setAttribute('aria-label', `Walk to ${p.year}: ${p.title}`);
+    b.innerHTML = `<b>${p.name}</b><small>${p.locked ? 'Soon' : p.tags[0] ?? p.kind}</small>`;
+    b.setAttribute('aria-label', `Walk to ${p.name}: ${p.title}`);
     b.addEventListener('click', () => onJump(i));
     rail.appendChild(b);
     return b;

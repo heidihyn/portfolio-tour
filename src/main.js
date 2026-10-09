@@ -64,7 +64,7 @@ composer.addPass(new OutputPass());
 const stations = PROJECTS.map((project, i) => {
   const side = project.end ? 0 : i % 2 === 0 ? -1 : 1;
   const z = project.end ? FIRST_PORTAL_Z - (i - 1) * SPACING - END_GAP : FIRST_PORTAL_Z - i * SPACING;
-  const portal = project.module.buildPortal({ year: project.year });
+  const portal = project.module.buildPortal();
   // Clicks land on a generous invisible box around the whole portal (frame included, either side),
   // not just its inner surface, so a click anywhere on the portal counts. Measured before the
   // group is placed, so the box sits in the portal's own frame. Labels, floor decor and parts
@@ -420,7 +420,7 @@ function updateHallway(dt, t) {
 
   // What Heidi says.
   if (state.mode === 'intro') {
-    ui.say('intro', "Hi, I'm Heidi. Welcome to my corner of the universe. Scroll to take a tour with me.");
+    ui.say('intro', "Hi, I'm Heidi. I'm interested in helping people genuinely connect, exchange ideas, and engage with less friction. Scroll to take a tour with me of the experiences I've brought to life.");
   } else if (atStation) {
     const p = st.project;
     const actions = p.page ? [{ label: p.end ? 'Step through' : 'Step inside', primary: true, onClick: () => enterStation(near.index) }] : [];

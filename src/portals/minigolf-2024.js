@@ -82,7 +82,7 @@ export function buildPortal() {
   truck.scale.setScalar(0.8);
   group.add(truck);
 
-  const label = makeLabel('2024', { sub: 'BIRTHDAY · MINIGOLF · TRIVIA · FOOD TRUCKS', color: '#23733a', subColor: '#4d6b52' });
+  const label = makeLabel('FAIRWAY', { sub: 'MINIGOLF · TRIVIA · FOOD TRUCKS', color: '#23733a', subColor: '#4d6b52' });
   label.position.set(0, CY + R + 0.75, 0);
   group.add(label);
 
