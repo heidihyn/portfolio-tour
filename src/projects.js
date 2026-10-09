@@ -10,8 +10,8 @@ import * as hostInvite from './portals/host-invite.js';
 // To add a project: create a module in ./portals that exports
 //   buildPortal() -> { group, focus, hitTargets, centerY, update(t, dt) }
 // and a standalone page for it (see projects/2024/index.html), then add an entry below with
-// `page` pointing at that page. Stepping through the portal opens the page. Leave out `page`
-// (like 2027) for a portal you can't enter yet.
+// `page` pointing at that page (or a full URL for a project hosted elsewhere, like 2026). Stepping
+// through the portal opens the page. Leave out `page` (like 2027) for a portal you can't enter yet.
 
 export const PROJECTS = [
   {
@@ -44,7 +44,7 @@ export const PROJECTS = [
     tags: ['AI murder mystery', 'Hacker game', 'Dance floor'],
     accent: '#ff4fb4',
     guideLine: "And this is 2026: an AI murder mystery, a hacking game, and a dance floor. Someone in there is lying.",
-    page: 'projects/2026/',
+    page: 'https://heidihyn.github.io/heartware-demo/',
     module: mystery,
   },
   {
