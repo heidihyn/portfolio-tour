@@ -433,7 +433,7 @@ function updateHallway(dt, t) {
 
   // What Heidi says.
   if (state.mode === 'intro') {
-    ui.say('intro', "Hi, I'm Heidi. I'm interested in helping people genuinely connect, exchange ideas, and engage with less friction. Scroll to take a tour with me of the experiences I've brought to life.");
+    ui.say('intro', "Hi, I'm Heidi. I like throwing parties and making sure a crowd is having fun. Scroll to take a tour with me of the experiences I've brought to life.");
   } else if (atStation) {
     const p = st.project;
     const actions = p.page ? [{ label: p.end ? 'Step through' : 'Step inside', primary: true, onClick: () => enterStation(near.index) }] : [];
